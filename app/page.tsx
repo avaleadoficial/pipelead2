@@ -20,7 +20,7 @@ export default function Home() {
         </h1>
 
         <div className="mt-8">
-          <Pipeline />
+          <Pipeline projectId="geral" />
         </div>
       </section>
     </main>
