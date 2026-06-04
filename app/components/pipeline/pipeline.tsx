@@ -44,9 +44,9 @@ const initialColumns: any[] = [
 ];
 
 export function Pipeline({
-  projectId,
+  projectId = "default",
 }: {
-  projectId: string;
+  projectId?: string;
 }) {
 
   // DRAG
