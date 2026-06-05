@@ -29,21 +29,23 @@ export default function LoginPage() {
 
   async function criarConta() {
 
-    const { error } =
-      await supabase.auth.signUp({
-        email,
-        password: senha,
-      });
+  alert("CRIAR CONTA");
 
-    if (error) {
-      alert(error.message);
-      return;
-    }
+  const { error } =
+    await supabase.auth.signUp({
+      email,
+      password: senha,
+    });
 
-    alert(
-      "Conta criada com sucesso! Agora faça login."
-    );
+  if (error) {
+    alert(error.message);
+    return;
   }
+
+  alert(
+    "Conta criada com sucesso! Agora faça login."
+  );
+}
 
   return (
 
