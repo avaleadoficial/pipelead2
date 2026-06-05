@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
@@ -10,6 +10,26 @@ export default function LoginPage() {
 
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+
+  useEffect(() => {
+
+    async function checkUser() {
+
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (session) {
+
+        router.replace("/dashboard");
+
+      }
+
+    }
+
+    checkUser();
+
+  }, [router]);
 
   async function handleLogin() {
 
@@ -26,26 +46,6 @@ export default function LoginPage() {
 
     router.push("/dashboard");
   }
-
-  async function criarConta() {
-
-  alert("CRIAR CONTA");
-
-  const { error } =
-    await supabase.auth.signUp({
-      email,
-      password: senha,
-    });
-
-  if (error) {
-    alert(error.message);
-    return;
-  }
-
-  alert(
-    "Conta criada com sucesso! Agora faça login."
-  );
-}
 
   return (
 
@@ -162,18 +162,18 @@ export default function LoginPage() {
         </div>
 
         <button
-  onClick={() => router.push("/cadastro")}
-  className="
-    w-full
-    border
-    p-4
-    rounded-2xl
-    text-black
-    hover:bg-gray-50
-  "
->
-  Criar nova conta
-</button>
+          onClick={() => router.push("/cadastro")}
+          className="
+            w-full
+            border
+            p-4
+            rounded-2xl
+            text-black
+            hover:bg-gray-50
+          "
+        >
+          Criar nova conta
+        </button>
 
       </div>
 
