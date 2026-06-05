@@ -141,6 +141,7 @@ export default function LoginPage() {
             p-4
             rounded-2xl
             font-medium
+          cursor-pointer
           "
           style={{
             backgroundColor: "#000000",
@@ -170,6 +171,7 @@ export default function LoginPage() {
             rounded-2xl
             text-black
             hover:bg-gray-50
+          cursor-pointer
           "
         >
           Criar nova conta
