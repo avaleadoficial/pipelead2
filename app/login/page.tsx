@@ -1,20 +1,48 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
 
 export default function LoginPage() {
 
   const router = useRouter();
 
-  function handleLogin() {
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
 
-    localStorage.setItem(
-      "logged",
-      "true"
-    );
+  async function handleLogin() {
+
+    const { error } =
+      await supabase.auth.signInWithPassword({
+        email,
+        password: senha,
+      });
+
+    if (error) {
+      alert(error.message);
+      return;
+    }
 
     router.push("/dashboard");
+  }
 
+  async function criarConta() {
+
+    const { error } =
+      await supabase.auth.signUp({
+        email,
+        password: senha,
+      });
+
+    if (error) {
+      alert(error.message);
+      return;
+    }
+
+    alert(
+      "Conta criada com sucesso! Agora faça login."
+    );
   }
 
   return (
@@ -61,6 +89,10 @@ export default function LoginPage() {
 
         <input
           placeholder="E-mail"
+          value={email}
+          onChange={(e) =>
+            setEmail(e.target.value)
+          }
           className="
             w-full
             border
@@ -74,6 +106,10 @@ export default function LoginPage() {
         <input
           type="password"
           placeholder="Senha"
+          value={senha}
+          onChange={(e) =>
+            setSenha(e.target.value)
+          }
           className="
             w-full
             border
@@ -124,6 +160,7 @@ export default function LoginPage() {
         </div>
 
         <button
+          onClick={criarConta}
           className="
             w-full
             border
