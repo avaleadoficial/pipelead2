@@ -162,18 +162,18 @@ export default function LoginPage() {
         </div>
 
         <button
-          onClick={criarConta}
-          className="
-            w-full
-            border
-            p-4
-            rounded-2xl
-            text-black
-            hover:bg-gray-50
-          "
-        >
-          Criar nova conta
-        </button>
+  onClick={() => router.push("/cadastro")}
+  className="
+    w-full
+    border
+    p-4
+    rounded-2xl
+    text-black
+    hover:bg-gray-50
+  "
+>
+  Criar nova conta
+</button>
 
       </div>
 
