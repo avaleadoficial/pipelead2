@@ -194,9 +194,16 @@ pdf.text(
   }
 );
 
-  pdf.save(
-    "relatorio-pipelead.pdf"
-  );
+  const cliente =
+  localStorage.getItem("company-name") || "cliente";
+
+const dataAtual =
+  new Date().toLocaleDateString("pt-BR")
+    .replace(/\//g, "-");
+
+pdf.save(
+  `Relatorio-${cliente}-${dataAtual}.pdf`
+);
 }
   return (
 
