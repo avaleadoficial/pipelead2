@@ -106,10 +106,13 @@ export default function CadastroPage() {
           onClick={criarConta}
           className="
             w-full
-            bg-black
-            text-white
-            p-4
-            rounded-2xl
+    bg-black
+    text-white
+    p-4
+    rounded-2xl
+    cursor-pointer
+    hover:opacity-90
+    transition
           "
         >
           {loading
@@ -123,8 +126,10 @@ export default function CadastroPage() {
           }
           className="
             w-full
-            mt-4
-            text-gray-500
+    mt-4
+    text-gray-500
+    cursor-pointer
+    hover:underline
           "
         >
           Já tenho uma conta
