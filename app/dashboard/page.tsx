@@ -203,7 +203,7 @@ pdf.save(
   return (
 
     <main
-  className="flex h-screen"
+  className="flex min-h-screen"
   style={{
     backgroundColor:
       "var(--background-color)",
@@ -356,8 +356,8 @@ pdf.save(
 
   <div
   className="
-    w-32
-    h-32
+    w-48
+    h-48
     shrink-0
   "
 >
