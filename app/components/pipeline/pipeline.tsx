@@ -532,7 +532,7 @@ function Column({
       <div
   ref={setNodeRef}
   className={`
-    min-w-[200px]
+    min-w-[170px]
     bg-gray-100
     rounded-2xl
     p-4
