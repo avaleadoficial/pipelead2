@@ -258,7 +258,7 @@ pdf.text(
               Leads
             </p>
 
-            <h2 className="text-6xl font-bold mt-3">
+            <h2 className="text-4xl font-bold mt-3">
               {totalLeads}
             </h2>
 
@@ -284,7 +284,7 @@ pdf.text(
               Projetos
             </p>
 
-            <h2 className="text-6xl font-bold mt-3">
+            <h2 className="text-4xl font-bold mt-3">
               {totalProjects}
             </h2>
 
