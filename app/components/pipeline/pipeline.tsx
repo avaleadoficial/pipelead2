@@ -371,14 +371,13 @@ function moveColumnRight(
       sensors={sensors}
     >
 
-      <div
+     <div
   className="
     flex
-    gap-5
+    gap-4
     overflow-x-auto
     pb-5
-    mx-auto
-    max-w-[1400px]
+    px-2
   "
 >
 
