@@ -324,7 +324,7 @@ pdf.save(
   <div
   className="
     grid
-    grid-cols-[1fr_500px]
+    grid-cols-[1fr_380px]
     items-center
   "
 >
@@ -348,16 +348,16 @@ pdf.save(
     flex
     justify-end
     items-center
-    gap-16
-    w-[500px]
+    gap-8
+    w-[380px]
     ml-auto
   "
 >
 
   <div
   className="
-    w-48
-    h-48
+    w-32
+    h-32
     shrink-0
   "
 >
