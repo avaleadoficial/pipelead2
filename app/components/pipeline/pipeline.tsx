@@ -371,7 +371,16 @@ function moveColumnRight(
       sensors={sensors}
     >
 
-      <div className="flex gap-3 overflow-x-auto pb-5">
+      <div
+  className="
+    flex
+    gap-5
+    overflow-x-auto
+    pb-5
+    mx-auto
+    max-w-[1400px]
+  "
+>
 
         {columns.map((column) => (
 
