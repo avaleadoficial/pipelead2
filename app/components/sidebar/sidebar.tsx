@@ -473,9 +473,9 @@ function renameProject() {
 
 <aside
   style={{
-    width: "220px",
-minWidth: "220px",
-maxWidth: "220px",
+    width: "200px",
+minWidth: "200px",
+maxWidth: "200px",
     background: "var(--sidebar-color)",
     color: "var(--sidebar-text-color)",
   }}
@@ -493,9 +493,9 @@ maxWidth: "220px",
       {/* TOPO */}
       <div className="mb-10">
 
-        <h1 className="text-3xl font-bold">
-          PipeLead
-        </h1>
+        <h1 className="text-2xl font-bold">
+  PipeLead
+</h1>
 
       </div>
 
@@ -508,7 +508,8 @@ maxWidth: "220px",
             flex
             items-center
             gap-3
-            p-3
+            py-2
+px-3
             rounded-xl
             hover:bg-white/10
             transition
@@ -525,7 +526,8 @@ maxWidth: "220px",
     flex
     items-center
     gap-3
-    p-3
+    py-2
+px-3
     font-medium
     opacity-80
   "
