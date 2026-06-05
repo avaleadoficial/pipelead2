@@ -371,7 +371,7 @@ function moveColumnRight(
       sensors={sensors}
     >
 
-      <div className="flex gap-1 overflow-x-auto pb-5">
+      <div className="flex gap-3 overflow-x-auto pb-5">
 
         {columns.map((column) => (
 
@@ -532,7 +532,7 @@ function Column({
       <div
   ref={setNodeRef}
   className={`
-    min-w-[260px]
+    min-w-[200px]
     bg-gray-100
     rounded-2xl
     p-4
@@ -580,8 +580,8 @@ function Column({
     flex
     items-center
     gap-2
-    font-bold
-    text-lg
+    font-semibold 
+    text-base
     cursor-pointer
   "
 >
