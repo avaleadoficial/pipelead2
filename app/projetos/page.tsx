@@ -126,7 +126,7 @@ console.log(defaultPipeline);
         }}
       >
 
-        <h1 className="text-5xl font-bold mb-8">
+        <h1 className="text-3xl font-bold mb-8">
           Projetos
         </h1>
 
