@@ -46,12 +46,12 @@ export default function ProjetoPage() {
 
   return (
 
-    <div className="flex">
+    <div className="flex min-h-screen">
 
       <Sidebar />
 
       <main
-        className="flex-1 p-8 min-h-screen"
+        className="flex-1 p-5 min-h-screen"
         style={{
           backgroundColor:
             "var(--background-color)",
@@ -60,9 +60,9 @@ export default function ProjetoPage() {
         }}
       >
 
-        <h1 className="text-5xl font-bold mb-8">
-          {projectName}
-        </h1>
+        <h1 className="text-4xl font-bold mb-6">
+  {projectName}
+</h1>
 
         <Pipeline
           projectId={projectId}
