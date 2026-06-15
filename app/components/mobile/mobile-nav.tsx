@@ -27,7 +27,7 @@ export function MobileNav() {
       </Link>
 
       <Link href="/mobile/configuracoes">
-        Config
+        Configurações
       </Link>
     </nav>
   );
