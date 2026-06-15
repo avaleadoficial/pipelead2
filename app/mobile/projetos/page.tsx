@@ -1,63 +1,46 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function MobileProjetosPage() {
-
-  const [projects, setProjects] =
-    useState<any[]>([]);
+  const [projects, setProjects] = useState<any[]>([]);
 
   useEffect(() => {
-
     const savedProjects =
       localStorage.getItem("projects");
 
+    console.log("PROJECTS:", savedProjects);
+
     if (savedProjects) {
-
-      setProjects(
-        JSON.parse(savedProjects)
-      );
-
+      setProjects(JSON.parse(savedProjects));
     }
-
   }, []);
 
   return (
+    <main className="p-4">
 
-    <main className="min-h-screen bg-gray-100 p-4 pb-24">
-
-      <h1 className="text-3xl font-bold mb-6">
-        Projetos
+      <h1 className="text-3xl font-bold">
+        Projetos Mobile
       </h1>
 
-      <div className="space-y-4">
+      <p className="mt-4">
+        Total: {projects.length}
+      </p>
 
-        {projects.map((project) => (
-
-          <Link
-            key={project.id}
-            href={`/mobile/projetos/${project.id}`}
-            className="
-              block
-              bg-white
-              rounded-3xl
-              p-5
-              shadow
-            "
-          >
-
-            <p className="text-xl font-semibold">
-              📁 {project.name}
-            </p>
-
-          </Link>
-
-        ))}
-
-      </div>
+      {projects.map((project) => (
+        <div
+          key={project.id}
+          className="
+            border
+            rounded-xl
+            p-4
+            mt-4
+          "
+        >
+          {project.name}
+        </div>
+      ))}
 
     </main>
-
   );
 }
