@@ -19,9 +19,16 @@ export default function Home() {
 
       if (session) {
 
-        router.replace("/dashboard");
+  const isMobile =
+    window.innerWidth < 768;
 
-      }
+  if (isMobile) {
+    router.replace("/mobile/dashboard");
+  } else {
+    router.replace("/dashboard");
+  }
+
+}
 
     }
 
