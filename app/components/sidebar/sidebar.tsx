@@ -1,4 +1,7 @@
+
 "use client";
+import { useMobile } from "@/hooks/useMobile";
+
 
 import {
   LayoutDashboard,
@@ -18,6 +21,8 @@ import {
 } from "react";
 
 export function Sidebar() {
+
+  const isMobile = useMobile();
 
   const router = useRouter();
 
@@ -215,6 +220,9 @@ function renameProject() {
 
   setNewProjectName("");
 
+}
+  if (isMobile) {
+  return null;
 }
   return (
   <>
