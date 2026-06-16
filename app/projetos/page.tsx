@@ -25,14 +25,16 @@ export default function ProjetosPage() {
     if (!session) return;
 
     const { data, error } =
-      await supabase
-        .from("pipelead-projects")
-        .insert({
-          user_id: session.user.id,
-          name: projectName,
-        })
-        .select()
-        .single();
+  await supabase
+    .from("pipelead-projects")
+    .insert({
+      user_id: session.user.id,
+      name: projectName,
+    })
+    .select()
+    .single();
+
+console.log(data);
 
     console.log("DATA:", data);
     console.log("ERROR:", error);
