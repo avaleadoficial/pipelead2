@@ -3,8 +3,8 @@ import { toPng } from "html-to-image";
 import jsPDF from "jspdf";
 import { Sidebar } from "../components/sidebar/sidebar";
 import { useEffect, useState } from "react";
-import { ProjectChart }
-from "../components/dashboard/pipeline-chart";
+import { supabase } from "@/lib/supabase";
+import { ProjectChart } from "../components/dashboard/pipeline-chart";
 
 const COLUMN_COLORS: Record<string, string> = {
   Conversando: "#eab308",
