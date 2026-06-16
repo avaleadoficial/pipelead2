@@ -230,39 +230,97 @@ if (
   }
 
   // NOVA OPORTUNIDADE
-  function handleCreateOpportunity(
-    columnId: string,
-    newOpportunity: any
-  ) {
+  async function handleCreateOpportunity(
+  columnId: string,
+  newOpportunity: any
+) {
 
-    const updatedColumns = columns.map(
-      (column) => {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
-        if (column.id === columnId) {
+  if (!session) return;
 
-          return {
-
-            ...column,
-
-            cards: [
-              ...column.cards,
-
-              {
-                ...newOpportunity,
-
-                id: Date.now().toString(),
-              },
-            ],
-          };
-        }
-
-        return column;
-      }
+  const column =
+    columns.find(
+      (c) => c.id === columnId
     );
 
-    setColumns(updatedColumns);
+  if (!column) return;
+
+  const { data, error } =
+    await supabase
+      .from("pipelead_leads")
+      .insert({
+        user_id: session.user.id,
+        project_id: projectId,
+
+        column_name:
+          column.title,
+
+        name:
+          newOpportunity.nome,
+
+        empresa:
+          newOpportunity.empresa,
+
+        phone:
+          newOpportunity.telefone,
+
+        email:
+          newOpportunity.email,
+
+        value:
+          Number(
+            newOpportunity.valor
+          ) || 0,
+
+        data:
+          newOpportunity.data || null,
+
+        obs:
+          newOpportunity.obs || "",
+      })
+      .select()
+      .single();
+
+  if (error) {
+    console.error(error);
+    alert(
+      "Erro ao criar oportunidade"
+    );
+    return;
   }
 
+  setColumns((prev) =>
+  prev.map((column) => {
+
+      if (
+        column.id !== columnId
+      )
+        return column;
+
+      return {
+        ...column,
+        cards: [
+          ...column.cards,
+          {
+            id: data.id,
+            nome: data.name,
+            empresa: data.empresa,
+            telefone: data.phone,
+            email: data.email,
+            valor: data.value,
+            data: data.data,
+            obs: data.obs,
+          },
+        ],
+      };
+
+     })
+);
+
+}
   // NOVA COLUNA
   function handleCreateColumn(
     title: string
