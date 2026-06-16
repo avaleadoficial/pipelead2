@@ -1,7 +1,7 @@
 "use client";
 
 import { Sidebar } from "../components/sidebar/sidebar";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 
 export default function ProjetosPage() {
@@ -12,90 +12,47 @@ export default function ProjetosPage() {
   const [projectName, setProjectName] =
     useState("");
 
-  useEffect(() => {
+  async function createProject() {
 
-  async function loadProjects() {
+    if (!projectName.trim()) return;
 
     const {
       data: { session },
     } = await supabase.auth.getSession();
+
+    console.log("SESSION:", session);
 
     if (!session) return;
 
     const { data, error } =
       await supabase
         .from("pipelead-projects")
-        .select("*")
-        .eq(
-          "user_id",
-          session.user.id
-        );
+        .insert({
+          user_id: session.user.id,
+          name: projectName,
+        })
+        .select()
+        .single();
 
-    if (error) {
+    console.log("DATA:", data);
+    console.log("ERROR:", error);
 
-      console.log(error);
-      return;
+    if (error) return;
 
-    }
+    setProjects([
+      ...projects,
+      data,
+    ]);
 
-    setProjects(data || []);
-
+    setProjectName("");
   }
-
-  loadProjects();
-
-}, []);
- async function createProject() {
-
-  if (!projectName.trim()) return;
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  if (!session) return;
-
-  const { data, error } =
-    await supabase
-      .from("pipelead-projects")
-      .insert({
-        user_id: session.user.id,
-        name: projectName,
-      })
-      .select()
-      .single();
-
-  if (error) {
-
-    console.log(error);
-    return;
-
-  }
-
-  setProjects([
-    ...projects,
-    data,
-  ]);
-
-  setProjectName("");
-
-}
 
   return (
-
     <div className="flex">
 
       <Sidebar />
 
-      <main
-        className="flex-1 p-8 min-h-screen"
-        style={{
-          backgroundColor:
-            "var(--background-color)",
-          color:
-            "var(--text-color)",
-        }}
-      >
+      <main className="flex-1 p-8 min-h-screen">
 
         <h1 className="text-3xl font-bold mb-8">
           Projetos
@@ -106,9 +63,7 @@ export default function ProjetosPage() {
           <input
             value={projectName}
             onChange={(e) =>
-              setProjectName(
-                e.target.value
-              )
+              setProjectName(e.target.value)
             }
             placeholder="Nome do projeto"
             className="
@@ -135,30 +90,8 @@ export default function ProjetosPage() {
 
         </div>
 
-        <div className="grid gap-4">
-
-          {projects.map((project) => (
-
-            <div
-              key={project.id}
-              className="
-                border
-                rounded-2xl
-                p-5
-                text-xl
-                font-semibold
-              "
-            >
-              📁 {project.name}
-            </div>
-
-          ))}
-
-        </div>
-
       </main>
 
     </div>
-
   );
 }
