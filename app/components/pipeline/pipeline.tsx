@@ -1,5 +1,5 @@
 "use client";
-
+import { supabase } from "@/lib/supabase";
 import {
   Pencil,
   ChevronLeft,
@@ -66,40 +66,63 @@ export function Pipeline({
     
 
   // CARREGAR
-  useEffect(() => {
+ useEffect(() => {
 
-  const savedPipeline =
-    localStorage.getItem(
-      `pipeline-${projectId}`
-    );
+  async function loadLeads() {
 
-  if (savedPipeline) {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
 
-    setColumns(
-      JSON.parse(savedPipeline)
-    );
+    if (!session) return;
 
-  } else {
+    const { data, error } =
+      await supabase
+        .from("pipelead_leads")
+        .select("*")
+        .eq("project_id", projectId)
+        .eq("user_id", session.user.id);
 
-    setColumns(initialColumns);
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    const cols = [...initialColumns];
+
+    data?.forEach((lead) => {
+
+      const columnIndex =
+        cols.findIndex(
+          (c) =>
+            c.title ===
+            lead.column_name
+        );
+
+      if (columnIndex === -1) return;
+
+      cols[columnIndex].cards.push({
+        id: lead.id,
+        nome: lead.name,
+        empresa: lead.empresa,
+        telefone: lead.phone,
+        email: lead.email,
+        valor: lead.value,
+        data: lead.data,
+        obs: lead.obs,
+      });
+
+    });
+
+    setColumns(cols);
 
   }
 
+  loadLeads();
+
 }, [projectId]);
 
-  // SALVAR
-  useEffect(() => {
 
-    if (columns.length > 0) {
-
-      localStorage.setItem(
-  `pipeline-${projectId}`,
-  JSON.stringify(columns)
-);
-
-    }
-
-  }, [columns]);
 
   // DRAG
   function handleDragEnd(event: any) {
