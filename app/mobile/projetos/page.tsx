@@ -6,8 +6,11 @@ export default function MobileProjetosPage() {
   const [projects, setProjects] = useState<any[]>([]);
 
   useEffect(() => {
-    const savedProjects =
-      localStorage.getItem("projects");
+    const {
+  data
+} = await supabase
+  .from("pipelead-projects")
+  .select("*");
 
     console.log("PROJECTS:", savedProjects);
 
