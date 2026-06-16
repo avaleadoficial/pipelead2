@@ -26,7 +26,7 @@ export default function ProjetosPage() {
 
     const { data, error } =
   await supabase
-    .from("pipelead-projects")
+    .from("pipelead_projects")
     .insert({
       user_id: session.user.id,
       name: projectName,
