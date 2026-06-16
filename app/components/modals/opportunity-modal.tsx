@@ -1,7 +1,7 @@
 "use client";
 
 import { useDraggable } from "@dnd-kit/core";
-
+import { supabase } from "@/lib/supabase";
 import { CSS } from "@dnd-kit/utilities";
 
 import { CalendarDays } from "lucide-react";
@@ -63,46 +63,36 @@ export function OpportunityModal({
   }
 
   // EXCLUIR
-  function handleDelete() {
+  async function handleDelete() {
 
-    const confirmDelete =
-      confirm(
-        "Deseja excluir esta oportunidade?"
-      );
-
-    if (!confirmDelete) return;
-
-    const savedPipeline =
-      localStorage.getItem(
-        "pipeline-data"
-      );
-
-    if (!savedPipeline) return;
-
-    const parsed =
-      JSON.parse(savedPipeline);
-
-    const updated =
-      parsed.map((column: any) => ({
-
-        ...column,
-
-        cards:
-          column.cards.filter(
-            (c: any) =>
-              c.id !== card.id
-          ),
-
-      }));
-
-    localStorage.setItem(
-      "pipeline-data",
-      JSON.stringify(updated)
+  const confirmDelete =
+    confirm(
+      "Deseja excluir esta oportunidade?"
     );
 
-    window.location.reload();
+  if (!confirmDelete) return;
+
+  const { error } =
+    await supabase
+      .from("pipelead_leads")
+      .delete()
+      .eq("id", card.id);
+
+  if (error) {
+
+    console.error(error);
+
+    alert(
+      "Erro ao excluir oportunidade"
+    );
+
+    return;
+
   }
 
+  window.location.reload();
+
+}
   return (
     <>
       {/* CARD */}
