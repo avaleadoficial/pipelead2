@@ -83,7 +83,7 @@ const [projectName, setProjectName] =
 
     const { data, error } =
       await supabase
-        .from("pipelead-projects")
+        .from("pipelead_projects")
         .select("*")
         .eq(
           "user_id",
@@ -114,7 +114,7 @@ async function createProject() {
 
   const { data, error } =
     await supabase
-      .from("pipelead-projects")
+      .from("pipelead_projects")
       .insert({
         user_id: session.user.id,
         name: projectName,
@@ -143,7 +143,7 @@ async function deleteProject(
 
   const { error } =
     await supabase
-      .from("pipelead-projects")
+      .from("pipelead_projects")
       .delete()
       .eq("id", projectId);
 
@@ -168,7 +168,7 @@ async function renameProject() {
 
   const { error } =
     await supabase
-      .from("pipelead-projects")
+      .from("pipelead_projects")
       .update({
         name: newProjectName,
       })
