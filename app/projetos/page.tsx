@@ -2,6 +2,7 @@
 
 import { Sidebar } from "../components/sidebar/sidebar";
 import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 export default function ProjetosPage() {
 
@@ -13,102 +14,72 @@ export default function ProjetosPage() {
 
   useEffect(() => {
 
-    const savedProjects =
-      localStorage.getItem("projects");
+  async function loadProjects() {
 
-    if (savedProjects) {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
 
-      setProjects(
-        JSON.parse(savedProjects)
-      );
+    if (!session) return;
+
+    const { data, error } =
+      await supabase
+        .from("pipelead-projects")
+        .select("*")
+        .eq(
+          "user_id",
+          session.user.id
+        );
+
+    if (error) {
+
+      console.log(error);
+      return;
 
     }
 
-  }, []);
-
-  function createProject() {
-
-    if (!projectName.trim()) return;
-
-    const newProject = {
-
-      id: Date.now().toString(),
-
-      name: projectName,
-
-    };
-
-    const defaultPipeline = [
-
-  {
-    id: Date.now() + "-1",
-    title: "Conversando",
-    cards: [],
-  },
-
-  {
-    id: Date.now() + "-2",
-    title: "Quente",
-    cards: [],
-  },
-
-  {
-    id: Date.now() + "-3",
-    title: "Fechou",
-    cards: [],
-  },
-
-  {
-    id: Date.now() + "-4",
-    title: "Achou caro",
-    cards: [],
-  },
-
-  {
-    id: Date.now() + "-5",
-    title: "Falar em breve",
-    cards: [],
-  },
-
-  {
-    id: Date.now() + "-6",
-    title: "Parou de responder",
-    cards: [],
-  },
-
-  {
-    id: Date.now() + "-7",
-    title: "Desqualificado",
-    cards: [],
-  },
-
-];
-
-    const updatedProjects = [
-      ...projects,
-      newProject,
-    ];
-
-    setProjects(updatedProjects);
-
-    localStorage.setItem(
-      "projects",
-      JSON.stringify(updatedProjects)
-    );
-
-    localStorage.setItem(
-  `pipeline-${newProject.id}`,
-  JSON.stringify(defaultPipeline)
-);
-console.log(
-  "Pipeline criado:",
-  `pipeline-${newProject.id}`
-);
-
-console.log(defaultPipeline);
-    setProjectName("");
+    setProjects(data || []);
 
   }
+
+  loadProjects();
+
+}, []);
+ async function createProject() {
+
+  if (!projectName.trim()) return;
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (!session) return;
+
+  const { data, error } =
+    await supabase
+      .from("pipelead-projects")
+      .insert({
+        user_id: session.user.id,
+        name: projectName,
+      })
+      .select()
+      .single();
+
+  if (error) {
+
+    console.log(error);
+    return;
+
+  }
+
+  setProjects([
+    ...projects,
+    data,
+  ]);
+
+  setProjectName("");
+
+}
 
   return (
 
