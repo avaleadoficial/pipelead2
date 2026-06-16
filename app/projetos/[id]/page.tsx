@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-
+import { supabase } from "@/lib/supabase";
 import { Sidebar } from "../../components/sidebar/sidebar";
 import { Pipeline } from "../../components/pipeline/pipeline";
 
@@ -18,31 +18,36 @@ export default function ProjetoPage() {
 
   useEffect(() => {
 
-    const savedProjects =
-      localStorage.getItem(
-        "projects"
-      );
+  async function loadProject() {
 
-    if (!savedProjects) return;
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
 
-    const projects =
-      JSON.parse(savedProjects);
+    if (!session) return;
 
-    const project =
-      projects.find(
-        (p: any) =>
-          p.id === projectId
-      );
+    const { data, error } =
+      await supabase
+        .from("pipelead-projects")
+        .select("*")
+        .eq("id", projectId)
+        .eq("user_id", session.user.id)
+        .single();
 
-    if (project) {
+    console.log(data);
+    console.log(error);
 
-      setProjectName(
-        project.name
-      );
+    if (data) {
+
+      setProjectName(data.name);
 
     }
 
-  }, [projectId]);
+  }
+
+  loadProject();
+
+}, [projectId]);
 
   return (
 
