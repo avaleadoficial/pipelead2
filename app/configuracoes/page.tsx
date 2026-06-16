@@ -1,7 +1,7 @@
 "use client";
 
 import { Sidebar } from "../components/sidebar/sidebar";
-
+import { supabase } from "@/lib/supabase";
 import { useEffect, useState } from "react";
 
 export default function ConfiguracoesPage() {
@@ -24,94 +24,92 @@ export default function ConfiguracoesPage() {
   const [textColor, setTextColor] =
     useState("#111111");
 
-  // LOAD
-  useEffect(() => {
+ useEffect(() => {
 
-    const savedSidebar =
-      localStorage.getItem(
-        "sidebar-color"
-      );
+  async function loadSettings() {
 
-    const savedSidebarText =
-      localStorage.getItem(
-        "sidebar-text-color"
-      );
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
 
-    const savedBg =
-      localStorage.getItem(
-        "background-color"
-      );
+    if (!session) return;
 
-    const savedText =
-      localStorage.getItem(
-        "text-color"
-      );
+    const { data } =
+      await supabase
+        .from("pipelead_settings")
+        .select("*")
+        .eq(
+          "user_id",
+          session.user.id
+        )
+        .single();
 
-    const savedName =
-      localStorage.getItem(
-        "company-name"
-      );
+    if (!data) return;
 
-    const savedLogo =
-      localStorage.getItem(
-        "company-logo"
-      );
+    setCompanyName(
+      data.company_name || ""
+    );
 
-    if (savedSidebar)
-      setSidebarColor(savedSidebar);
+    setLogo(
+      data.company_logo || ""
+    );
 
-    if (savedSidebarText)
-      setSidebarTextColor(
-        savedSidebarText
-      );
+    setSidebarColor(
+      data.sidebar_color ||
+      "#000000"
+    );
 
-    if (savedBg)
-      setBackgroundColor(savedBg);
+    setSidebarTextColor(
+      data.sidebar_text_color ||
+      "#ffffff"
+    );
 
-    if (savedText)
-      setTextColor(savedText);
+    setBackgroundColor(
+      data.background_color ||
+      "#f5f5f5"
+    );
 
-    if (savedName)
-      setCompanyName(savedName);
+    setTextColor(
+      data.text_color ||
+      "#111111"
+    );
 
-    if (savedLogo)
-      setLogo(savedLogo);
+  }
 
-  }, []);
+  loadSettings();
 
+}, []);
 
   // SALVAR
- function handleSave() {
+ async function handleSave() {
 
-  localStorage.setItem(
-    "sidebar-color",
-    sidebarColor
-  );
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
-  localStorage.setItem(
-    "sidebar-text-color",
-    sidebarTextColor
-  );
+  if (!session) return;
 
-  localStorage.setItem(
-    "background-color",
-    backgroundColor
-  );
+  const payload = {
+    user_id: session.user.id,
+    company_name: companyName,
+    company_logo: logo,
+    sidebar_color: sidebarColor,
+    sidebar_text_color: sidebarTextColor,
+    background_color: backgroundColor,
+    text_color: textColor,
+  };
 
-  localStorage.setItem(
-    "text-color",
-    textColor
-  );
+  const { error } = await supabase
+    .from("pipelead_settings")
+    .upsert(payload, {
+      onConflict: "user_id",
+    });
 
-  localStorage.setItem(
-    "company-name",
-    companyName
-  );
-
-  localStorage.setItem(
-    "company-logo",
-    logo
-  );
+  if (error) {
+    console.error(error);
+    alert("Erro ao salvar");
+    return;
+  }
 
   document.documentElement.style.setProperty(
     "--sidebar-color",
@@ -134,6 +132,7 @@ export default function ConfiguracoesPage() {
   );
 
   alert("Configurações salvas!");
+
 }
 
   // LOGO
