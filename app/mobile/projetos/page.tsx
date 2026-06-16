@@ -1,25 +1,38 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 export default function MobileProjetosPage() {
-  const [projects, setProjects] = useState<any[]>([]);
+
+  const [projects, setProjects] =
+    useState<any[]>([]);
 
   useEffect(() => {
-    const {
-  data
-} = await supabase
-  .from("pipelead-projects")
-  .select("*");
 
-    console.log("PROJECTS:", savedProjects);
+    async function loadProjects() {
 
-    if (savedProjects) {
-      setProjects(JSON.parse(savedProjects));
+      const {
+        data,
+        error,
+      } = await supabase
+        .from("pipelead-projects")
+        .select("*");
+
+      console.log(data);
+
+      if (!error && data) {
+        setProjects(data);
+      }
+
     }
+
+    loadProjects();
+
   }, []);
 
   return (
+
     <main className="p-4">
 
       <h1 className="text-3xl font-bold">
@@ -31,6 +44,7 @@ export default function MobileProjetosPage() {
       </p>
 
       {projects.map((project) => (
+
         <div
           key={project.id}
           className="
@@ -42,8 +56,10 @@ export default function MobileProjetosPage() {
         >
           {project.name}
         </div>
+
       ))}
 
     </main>
+
   );
 }
