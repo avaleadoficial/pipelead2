@@ -208,26 +208,46 @@ if (
   }
 
   // EDITAR CARD
-  function handleSaveCard(updatedCard: any) {
+  async function handleSaveCard(
+  updatedCard: any
+) {
 
-    const updatedColumns = columns.map(
-      (column) => ({
-
-        ...column,
-
-        cards: column.cards.map(
-          (card: any) =>
-
-            card.id === updatedCard.id
-              ? updatedCard
-              : card
-        ),
-
+  const { error } =
+    await supabase
+      .from("pipelead_leads")
+      .update({
+        name: updatedCard.nome,
+        empresa: updatedCard.empresa,
+        phone: updatedCard.telefone,
+        email: updatedCard.email,
+        value:
+          Number(updatedCard.valor) || 0,
+        data:
+          updatedCard.data || null,
+        obs:
+          updatedCard.obs || "",
       })
-    );
+      .eq("id", updatedCard.id);
 
-    setColumns(updatedColumns);
+  if (error) {
+    console.error(error);
+    alert("Erro ao salvar");
+    return;
   }
+
+  setColumns((prev) =>
+    prev.map((column) => ({
+      ...column,
+      cards: column.cards.map(
+        (card: any) =>
+          card.id === updatedCard.id
+            ? updatedCard
+            : card
+      ),
+    }))
+  );
+
+}
 
   // NOVA OPORTUNIDADE
   async function handleCreateOpportunity(
