@@ -28,7 +28,7 @@ export default function ProjetoPage() {
 
     const { data, error } =
       await supabase
-        .from("pipelead-projects")
+        .from("pipelead_projects")
         .select("*")
         .eq("id", projectId)
         .eq("user_id", session.user.id)
