@@ -25,80 +25,100 @@ const [totalProjects, setTotalProjects] =
 const [projectStats, setProjectStats] =
   useState<any[]>([]);
 
-  useEffect(() => {
+ useEffect(() => {
 
-  const savedProjects =
-    localStorage.getItem("projects");
+  async function loadDashboard() {
 
-  let totalLeadsCount = 0;
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
 
-  const stats: any[] = [];
+    if (!session) return;
 
-
-  if (savedProjects) {
-
-    const projects =
-      JSON.parse(savedProjects);
-
-    projects.forEach(
-      (project: any) => {
-
-        const savedPipeline =
-          localStorage.getItem(
-            `pipeline-${project.id}`
-          );
-
-        if (!savedPipeline)
-          return;
-
-        const columns =
-          JSON.parse(savedPipeline);
-
-        let total = 0;
-
-        columns.forEach(
-          (column: any) => {
-
-            total +=
-              column.cards?.length || 0;
-
-          }
+    const { data: projects } =
+      await supabase
+        .from("pipelead_projects")
+        .select("*")
+        .eq(
+          "user_id",
+          session.user.id
         );
 
-        totalLeadsCount += total;
-
-        const chartData =
-  columns.map(
-    (column: any) => ({
-      name: column.title,
-      value:
-        column.cards?.length || 0,
-    })
-  );
-
-stats.push({
-  name: project.name,
-  total,
-  chartData,
-});
-
-      }
-    );
+    const { data: leads } =
+      await supabase
+        .from("pipelead_leads")
+        .select("*")
+        .eq(
+          "user_id",
+          session.user.id
+        );
 
     setTotalProjects(
-  projects.length
-);
+      projects?.length || 0
+    );
+
+    setTotalLeads(
+      leads?.length || 0
+    );
+
+    const stats =
+      (projects || []).map(
+        (project: any) => {
+
+          const projectLeads =
+            (leads || []).filter(
+              (lead: any) =>
+                lead.project_id ===
+                project.id
+            );
+
+          const grouped =
+            projectLeads.reduce(
+              (
+                acc: any,
+                lead: any
+              ) => {
+
+                acc[
+                  lead.column_name
+                ] =
+                  (acc[
+                    lead.column_name
+                  ] || 0) + 1;
+
+                return acc;
+
+              },
+              {}
+            );
+
+          const chartData =
+            Object.entries(
+              grouped
+            ).map(
+              ([name, value]) => ({
+                name,
+                value,
+              })
+            );
+
+          return {
+            name: project.name,
+            total:
+              projectLeads.length,
+            chartData,
+          };
+
+        }
+      );
+
+    setProjectStats(stats);
 
   }
 
-  setProjectStats(stats);
-
-  setTotalLeads(
-    totalLeadsCount
-  );
+  loadDashboard();
 
 }, []);
-
 async function exportPDF() {
   const element =
     document.getElementById(
