@@ -1,6 +1,7 @@
 
 "use client";
 import { useMobile } from "@/hooks/useMobile";
+import { supabase } from "@/lib/supabase";
 
 
 import {
@@ -52,109 +53,84 @@ const [projectName, setProjectName] =
   useState("");
 
 
-  useEffect(() => {
+ useEffect(() => {
 
-  const savedName =
-    localStorage.getItem(
-      "company-name"
-    );
+  async function loadData() {
 
-  const savedLogo =
-    localStorage.getItem(
-      "company-logo"
-    );
+    const savedName =
+      localStorage.getItem(
+        "company-name"
+      );
 
-  const savedProjects =
-    localStorage.getItem(
-      "projects"
-    );
+    const savedLogo =
+      localStorage.getItem(
+        "company-logo"
+      );
 
-  if (savedName) {
-    setCompanyName(savedName);
+    if (savedName) {
+      setCompanyName(savedName);
+    }
+
+    if (savedLogo) {
+      setLogo(savedLogo);
+    }
+
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    if (!session) return;
+
+    const { data, error } =
+      await supabase
+        .from("pipelead-projects")
+        .select("*")
+        .eq(
+          "user_id",
+          session.user.id
+        );
+
+    console.log("PROJECTS:", data);
+    console.log("ERROR:", error);
+
+    if (data) {
+      setProjects(data);
+    }
+
   }
 
-  if (savedLogo) {
-    setLogo(savedLogo);
-  }
-
-  if (savedProjects) {
-    setProjects(
-      JSON.parse(savedProjects)
-    );
-  }
+  loadData();
 
 }, []);
-function createProject() {
+async function createProject() {
 
   if (!projectName.trim()) return;
 
-  const newProject = {
-    id: Date.now().toString(),
-    name: projectName,
-  };
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
-  const defaultPipeline = [
+  if (!session) return;
 
-    {
-      id: "1",
-      title: "Conversando",
-      cards: [],
-    },
+  const { data, error } =
+    await supabase
+      .from("pipelead-projects")
+      .insert({
+        user_id: session.user.id,
+        name: projectName,
+      })
+      .select()
+      .single();
 
-    {
-      id: "2",
-      title: "Quente",
-      cards: [],
-    },
+  console.log(data);
+  console.log(error);
 
-    {
-      id: "3",
-      title: "Fechou",
-      cards: [],
-    },
+  if (error) return;
 
-    {
-      id: "4",
-      title: "Achou caro",
-      cards: [],
-    },
-
-    {
-      id: "5",
-      title: "Falar em breve",
-      cards: [],
-    },
-
-    {
-      id: "6",
-      title: "Parou de responder",
-      cards: [],
-    },
-
-    {
-      id: "7",
-      title: "Desqualificado",
-      cards: [],
-    },
-
-  ];
-
-  localStorage.setItem(
-    `pipeline-${newProject.id}`,
-    JSON.stringify(defaultPipeline)
-  );
-
-  const updatedProjects = [
+  setProjects([
     ...projects,
-    newProject,
-  ];
-
-  setProjects(updatedProjects);
-
-  localStorage.setItem(
-    "projects",
-    JSON.stringify(updatedProjects)
-  );
+    data,
+  ]);
 
   setProjectName("");
 
