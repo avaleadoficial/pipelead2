@@ -178,12 +178,23 @@ export function Pipeline({
     if (targetColumnIndex !== -1) {
 
   newColumns[targetColumnIndex].cards.push(
-    draggedCard
-  );
+  draggedCard
+);
 
-  const targetColumn =
+const targetColumn =
   newColumns[targetColumnIndex];
 
+supabase
+  .from("pipelead_leads")
+  .update({
+    column_name: targetColumn.title,
+  })
+  .eq("id", draggedCard.id)
+  .then(({ error }) => {
+    if (error) {
+      console.error(error);
+    }
+  });
 if (
   targetColumn.title
     .trim()
