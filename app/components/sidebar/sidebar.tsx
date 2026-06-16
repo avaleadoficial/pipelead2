@@ -104,11 +104,15 @@ const [projectName, setProjectName] =
 }, []);
 async function createProject() {
 
+  console.log("CLICOU");
+
   if (!projectName.trim()) return;
 
   const {
     data: { session },
   } = await supabase.auth.getSession();
+
+  console.log("SESSION:", session);
 
   if (!session) return;
 
@@ -122,10 +126,13 @@ async function createProject() {
       .select()
       .single();
 
-  console.log(data);
-  console.log(error);
+  console.log("DATA:", data);
+  console.log("ERROR:", error);
 
-  if (error) return;
+  if (error) {
+    alert(error.message);
+    return;
+  }
 
   setProjects([
     ...projects,
@@ -135,7 +142,6 @@ async function createProject() {
   setProjectName("");
 
   setOpenProjectModal(false);
-
 }
 async function deleteProject(
   projectId: string
