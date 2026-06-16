@@ -137,59 +137,60 @@ async function createProject() {
   setOpenProjectModal(false);
 
 }
-function deleteProject(projectId: string) {
+async function deleteProject(
+  projectId: string
+) {
 
-  const updatedProjects =
+  const { error } =
+    await supabase
+      .from("pipelead-projects")
+      .delete()
+      .eq("id", projectId);
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  setProjects(
     projects.filter(
       (project) =>
         project.id !== projectId
-    );
-
-  setProjects(updatedProjects);
-
-  localStorage.setItem(
-    "projects",
-    JSON.stringify(updatedProjects)
-  );
-
-  localStorage.removeItem(
-    `pipeline-${projectId}`
-  );
-
-
-  setProjects(updatedProjects);
-
-  localStorage.setItem(
-    "projects",
-    JSON.stringify(updatedProjects)
-  );
-
-  localStorage.removeItem(
-    `pipeline-${projectId}`
+    )
   );
 
 }
-function renameProject() {
+
+ 
+async function renameProject() {
 
   if (!editingProject) return;
 
-  const updatedProjects =
-    projects.map((project) =>
+  const { error } =
+    await supabase
+      .from("pipelead-projects")
+      .update({
+        name: newProjectName,
+      })
+      .eq(
+        "id",
+        editingProject.id
+      );
 
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  setProjects(
+    projects.map((project) =>
       project.id === editingProject.id
         ? {
             ...project,
             name: newProjectName,
           }
         : project
-
-    );
-
-  setProjects(updatedProjects);
-
-  localStorage.setItem(
-    "projects",
-    JSON.stringify(updatedProjects)
+    )
   );
 
   setEditingProject(null);
@@ -738,15 +739,13 @@ px-3
 
         {/* SAIR */}
         <button
-  onClick={() => {
+  onClick={async () => {
 
-    localStorage.removeItem(
-      "logged"
-    );
+  await supabase.auth.signOut();
 
-    router.push("/login");
+  router.push("/login");
 
-  }}
+}}
   className="
     w-full
     bg-white/10
