@@ -23,26 +23,6 @@ import { CreateOpportunityModal } from "../modals/create-opportunity-modal";
 
 import { CreateColumnModal } from "../modals/create-column-modal";
 
-const initialColumns: any[] = [
-  {
-    id: "1",
-    title: "Leads",
-    cards: [],
-  },
-
-  {
-    id: "2",
-    title: "Conversando",
-    cards: [],
-  },
-
-  {
-    id: "3",
-    title: "Quase fechando",
-    cards: [],
-  },
-];
-
 export function Pipeline({
   projectId = "default",
 }: {
@@ -88,34 +68,47 @@ export function Pipeline({
       return;
     }
 
-    const cols = [...initialColumns];
+   const { data: dbColumns } =
+  await supabase
+    .from("pipelead_columns")
+    .select("*")
+    .eq("project_id", projectId)
+    .order("position");
 
-    data?.forEach((lead) => {
+if (!dbColumns) return;
 
-      const columnIndex =
-        cols.findIndex(
-          (c) =>
-            c.title ===
-            lead.column_name
-        );
+const cols = dbColumns.map(
+  (column: any) => ({
+    id: column.id,
+    title: column.title,
+    cards: [],
+  })
+);
 
-      if (columnIndex === -1) return;
+data?.forEach((lead) => {
 
-      cols[columnIndex].cards.push({
-        id: lead.id,
-        nome: lead.name,
-        empresa: lead.empresa,
-        telefone: lead.phone,
-        email: lead.email,
-        valor: lead.value,
-        data: lead.data,
-        obs: lead.obs,
-      });
+  const columnIndex =
+    cols.findIndex(
+      (c) =>
+        c.title === lead.column_name
+    );
 
-    });
+  if (columnIndex === -1) return;
 
-    setColumns(cols);
+  cols[columnIndex].cards.push({
+    id: lead.id,
+    nome: lead.name,
+    empresa: lead.empresa,
+    telefone: lead.phone,
+    email: lead.email,
+    valor: lead.value,
+    data: lead.data,
+    obs: lead.obs,
+  });
 
+});
+
+setColumns(cols);
   }
 
   loadLeads();
@@ -353,50 +346,81 @@ if (
 
 }
   // NOVA COLUNA
-  function handleCreateColumn(
-    title: string
-  ) {
+  async function handleCreateColumn(
+  title: string
+) {
 
-    if (!title.trim()) return;
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
-    const newColumn = {
+  if (!session) return;
 
-      id: Date.now().toString(),
+  const { data } =
+    await supabase
+      .from("pipelead_columns")
+      .insert({
+        user_id: session.user.id,
+        project_id: projectId,
+        title,
+        position: columns.length + 1,
+      })
+      .select()
+      .single();
 
-      title,
+  if (!data) return;
 
+  setColumns([
+    ...columns,
+    {
+      id: data.id,
+      title: data.title,
       cards: [],
-    };
+    },
+  ]);
 
-    setColumns([
-      ...columns,
-      newColumn,
-    ]);
-  }
+}
 
   // EDITAR COLUNA
-  function handleEditColumn(
-    columnId: string,
-    newTitle: string
-  ) {
+  async function handleEditColumn(
+  columnId: string,
+  newTitle: string
+) {
 
-    const updatedColumns =
-      columns.map((column) => {
+  const { error } =
+    await supabase
+      .from("pipelead_columns")
+      .update({
+        title: newTitle,
+      })
+      .eq("id", columnId);
 
-        if (column.id === columnId) {
-
-          return {
-            ...column,
-            title: newTitle,
-          };
-        }
-
-        return column;
-      });
-
-    setColumns(updatedColumns);
+  if (error) {
+    console.error(error);
+    return;
   }
 
+  setColumns(
+    columns.map((column) => {
+
+      if (
+        column.id === columnId
+      ) {
+
+        return {
+          ...column,
+          title: newTitle,
+        };
+
+      }
+
+      return column;
+
+    })
+  );
+
+} 
+  
   function moveColumnLeft(
   columnId: string
 ) {
@@ -454,25 +478,43 @@ function moveColumnRight(
 }
 
   // EXCLUIR COLUNA
-  function handleDeleteColumn(
-    columnId: string
-  ) {
+  async function handleDeleteColumn(
+  columnId: string
+) {
 
-        const confirmDelete =
-      confirm(
-        "Deseja excluir esta etapa?"
-      );
+  const confirmDelete =
+    confirm(
+      "Deseja excluir esta etapa?"
+    );
 
-    if (!confirmDelete) return;
+  if (!confirmDelete) return;
 
-    const updatedColumns =
-      columns.filter(
-        (column) =>
-          column.id !== columnId
-      );
+  const { error } =
+    await supabase
+      .from("pipelead_columns")
+      .delete()
+      .eq("id", columnId);
 
-    setColumns(updatedColumns);
+  if (error) {
+
+    console.error(error);
+
+    alert(
+      "Erro ao excluir etapa"
+    );
+
+    return;
+
   }
+
+  setColumns(
+    columns.filter(
+      (column) =>
+        column.id !== columnId
+    )
+  );
+
+} 
 
   return (
 
