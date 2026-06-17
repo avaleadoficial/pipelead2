@@ -30,8 +30,9 @@ export function CreateColumnModal({
       <button
   onClick={() => setOpen(true)}
   className="
-    min-w-[320px]
-    h-[80px]
+    w-[170px]
+min-w-[170px]
+h-[50px]
     border-2
     border-dashed
     rounded-2xl
@@ -51,7 +52,7 @@ export function CreateColumnModal({
 
   return (
 
-    <div className="min-w-[320px] bg-white rounded-2xl p-4 shadow">
+    <div className="w-[250px] min-w-[250px] bg-white rounded-2xl p-4 shadow">
 
       <input
         value={title}
