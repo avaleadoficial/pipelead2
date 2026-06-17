@@ -510,21 +510,21 @@ async function renameProject() {
 <aside
   style={{
     width: "200px",
-minWidth: "200px",
-maxWidth: "200px",
     background: "var(--sidebar-color)",
     color: "var(--sidebar-text-color)",
   }}
   className="
+    fixed
+    left-0
+    top-0
     h-screen
     border-r
     p-5
-    relative
     flex
     flex-col
-    shrink-0
+    z-40
   "
-    >
+>
 
       {/* TOPO */}
       <div className="mb-10">
