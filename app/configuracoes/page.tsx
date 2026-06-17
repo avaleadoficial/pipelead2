@@ -109,7 +109,7 @@ export default function ConfiguracoesPage() {
     <main
   className="flex min-h-screen"
   style={{
-    backgroundColor: "#0f172a",
+    backgroundColor: "#f5f5f5",
     color: "#0f172a",
   }}
 >
