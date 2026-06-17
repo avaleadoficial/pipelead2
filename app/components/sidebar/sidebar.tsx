@@ -508,11 +508,6 @@ async function renameProject() {
 
 
 <aside
-  style={{
-    width: "200px",
-    background: "var(--sidebar-color)",
-    color: "var(--sidebar-text-color)",
-  }}
   className="
     fixed
     left-0
@@ -523,7 +518,12 @@ async function renameProject() {
     flex
     flex-col
     z-40
+    bg-[#27272a]
+    text-[#a5a5a6]
   "
+  style={{
+    width: "200px",
+  }}
 >
 
       {/* TOPO */}
