@@ -171,7 +171,13 @@ export default function ConfiguracoesPage() {
 
       <Sidebar />
 
-      <section className="flex-1 p-8">
+      <section
+  className="
+    flex-1
+    p-8
+    ml-[200px]
+  "
+>
 
         <h1 className="text-5xl font-bold mb-10">
           Configurações
