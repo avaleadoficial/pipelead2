@@ -77,11 +77,11 @@ export function Pipeline({
 
 if (!dbColumns) return;
 
-const cols = dbColumns.map(
+const cols: any[] = dbColumns.map(
   (column: any) => ({
     id: column.id,
     title: column.title,
-    cards: [],
+    cards: [] as any[],
   })
 );
 
