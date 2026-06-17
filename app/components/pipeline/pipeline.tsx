@@ -519,75 +519,61 @@ function moveColumnRight(
   return (
 
   <DndContext
+  collisionDetection={closestCenter}
+  onDragEnd={handleDragEnd}
+  sensors={sensors}
+>
 
-      collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}
-      sensors={sensors}
-    >
+  <div
+    className="
+      w-full
+      overflow-x-auto
+      overflow-y-hidden
+    "
+  >
 
     <div
-  className="
-    flex
-    flex-nowrap
-    gap-0
-    overflow-x-auto
-    pb-5
-    px-1
-    items-start
-  "
->
+      className="
+        flex
+        flex-nowrap
+        gap-0
+        pb-5
+        px-1
+        items-start
+        min-w-max
+      "
+    >
 
-        {columns.map((column) => (
+      {columns.map((column) => (
 
-          <Column
-  key={column.id}
-  column={column}
-  success={
-    successColumnId === column.id
-  }
-  onCreateOpportunity={handleCreateOpportunity}
-  onEditColumn={handleEditColumn}
-  onDeleteColumn={handleDeleteColumn}
-  onMoveLeft={moveColumnLeft}
-  onMoveRight={moveColumnRight}
->
+        <Column
+          key={column.id}
+          column={column}
+          success={
+            successColumnId === column.id
+          }
+          onCreateOpportunity={handleCreateOpportunity}
+          onEditColumn={handleEditColumn}
+          onDeleteColumn={handleDeleteColumn}
+          onMoveLeft={moveColumnLeft}
+          onMoveRight={moveColumnRight}
+        >
 
-            {
-  [...column.cards]
-    .sort((a, b) => {
+          {/* cards */}
 
-      if (!a.data) return 1;
-      if (!b.data) return -1;
+        </Column>
 
-      return (
-        new Date(a.data).getTime() -
-        new Date(b.data).getTime()
-      );
+      ))}
 
-    })
-    .map((card: any) => (
+      <CreateColumnModal
+        onCreate={handleCreateColumn}
+      />
 
-              <OpportunityModal
-  key={card.id}
-  card={card}
-  onSave={handleSaveCard}
-/>
-  
+    </div>
 
-            ))}
+  </div>
 
-          </Column>
-
-        ))}
-
-        {/* NOVA COLUNA */}
-        <CreateColumnModal
-          onCreate={handleCreateColumn}
-        />
-
-      </div>
-
-    </DndContext>
+</DndContext>
   );
 }
 
