@@ -525,14 +525,16 @@ function moveColumnRight(
       sensors={sensors}
     >
 
-     <div
- className="
-  flex
-  gap-2
-  overflow-x-auto
-  pb-5
-  px-2
-"
+    <div
+  className="
+    flex
+    flex-nowrap
+    gap-1
+    overflow-x-auto
+    pb-5
+    px-1
+    items-start
+  "
 >
 
         {columns.map((column) => (
@@ -691,14 +693,15 @@ function Column({
       )}
 
       {/* COLUNA */}
-      <div
+     <div
   ref={setNodeRef}
   className={`
-    w-[200px]
-min-w-[200px]
+    w-[150px]
+    min-w-[150px]
+    flex-shrink-0
     bg-gray-100
     rounded-2xl
-    p-4
+    p-2
     transition-all
     ${
       success
