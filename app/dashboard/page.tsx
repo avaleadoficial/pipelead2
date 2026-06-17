@@ -236,9 +236,12 @@ pdf.save(
 
       <section
   id="dashboard-report"
-  className="flex-1 p-8"
+  className="
+    flex-1
+    p-8
+    ml-[200px]
+  "
 >
-
         <div className="flex justify-between items-center">
 
   <h1 className="text-3xl font-bold">
