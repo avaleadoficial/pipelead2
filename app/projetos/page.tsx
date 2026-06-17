@@ -25,6 +25,7 @@ export default function ProjetosPage() {
     if (!session) return;
 
     const { data, error } =
+      
   await supabase
     .from("pipelead_projects")
     .insert({
@@ -40,7 +41,9 @@ console.log(data);
     console.log("ERROR:", error);
 
     if (error) return;
-
+    
+    console.log("CRIANDO COLUNAS");
+    
     await supabase
   .from("pipelead_columns")
   .insert([
