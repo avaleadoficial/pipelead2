@@ -61,7 +61,6 @@ export default function ProjetoPage() {
     p-5
     min-h-screen
     ml-[200px]
-    overflow-hidden
   "
   style={{
     backgroundColor:
