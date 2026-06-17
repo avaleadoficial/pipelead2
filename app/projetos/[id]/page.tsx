@@ -70,7 +70,7 @@ export default function ProjetoPage() {
   }}
 >
 
-        <h1 className="text-4xl font-bold mb-6">
+        <h1 className="text-3xl font-bold mb-6">
   {projectName}
 </h1>
 
