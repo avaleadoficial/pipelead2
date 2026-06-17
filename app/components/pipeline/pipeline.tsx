@@ -525,12 +525,11 @@ function moveColumnRight(
       sensors={sensors}
     >
 
-    <div
+   <div
   className="
     flex
     flex-nowrap
     gap-0
-    overflow-x-auto
     pb-5
     px-1
     items-start
