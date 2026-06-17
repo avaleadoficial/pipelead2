@@ -529,7 +529,7 @@ function moveColumnRight(
   className="
     flex
     flex-nowrap
-    gap-1
+    gap-0
     overflow-x-auto
     pb-5
     px-1
@@ -738,16 +738,16 @@ function Column({
   <ChevronLeft size={12} />
 </button>
 
-  <button
+ <button
   onClick={() =>
     setEditing(true)
   }
   className="
     flex
     items-center
-    gap-2
-    font-semibold 
-    text-sm
+    gap-1
+    font-medium
+    text-xs
     cursor-pointer
   "
 >
