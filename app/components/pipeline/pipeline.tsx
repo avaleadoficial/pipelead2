@@ -802,14 +802,14 @@ function Column({
 
         </div>
 
-        {/* NOVA ETAPA */}
+        {/* NOVA OPORTUNIDADE */}
         <button
           onClick={() =>
             setOpenOpportunityModal(true)
           }
           className="w-full mt-3 border-2 border-dashed border-gray-300 rounded-xl p-2 text-sm hover:bg-white transition cursor-pointer"
         >
-          + Nova Etapa
+          + Nova Oportunidade
         </button>
 
         {/* MODAL */}
