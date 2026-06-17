@@ -55,15 +55,21 @@ export default function ProjetoPage() {
 
       <Sidebar />
 
-      <main
-        className="flex-1 p-5 min-h-screen"
-        style={{
-          backgroundColor:
-            "var(--background-color)",
-          color:
-            "var(--text-color)",
-        }}
-      >
+     <main
+  className="
+    flex-1
+    p-5
+    min-h-screen
+    ml-[200px]
+    overflow-hidden
+  "
+  style={{
+    backgroundColor:
+      "var(--background-color)",
+    color:
+      "var(--text-color)",
+  }}
+>
 
         <h1 className="text-4xl font-bold mb-6">
   {projectName}
