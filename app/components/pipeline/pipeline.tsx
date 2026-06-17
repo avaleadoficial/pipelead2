@@ -519,61 +519,75 @@ function moveColumnRight(
   return (
 
   <DndContext
-  collisionDetection={closestCenter}
-  onDragEnd={handleDragEnd}
-  sensors={sensors}
->
 
-  <div
-    className="
-      w-full
-      overflow-x-auto
-      overflow-y-hidden
-    "
-  >
-
-    <div
-      className="
-        flex
-        flex-nowrap
-        gap-0
-        pb-5
-        px-1
-        items-start
-        min-w-max
-      "
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+      sensors={sensors}
     >
 
-      {columns.map((column) => (
+    <div
+  className="
+    flex
+    flex-nowrap
+    gap-0
+    overflow-x-auto
+    pb-5
+    px-1
+    items-start
+  "
+>
 
-        <Column
-          key={column.id}
-          column={column}
-          success={
-            successColumnId === column.id
-          }
-          onCreateOpportunity={handleCreateOpportunity}
-          onEditColumn={handleEditColumn}
-          onDeleteColumn={handleDeleteColumn}
-          onMoveLeft={moveColumnLeft}
-          onMoveRight={moveColumnRight}
-        >
+        {columns.map((column) => (
 
-          {/* cards */}
+          <Column
+  key={column.id}
+  column={column}
+  success={
+    successColumnId === column.id
+  }
+  onCreateOpportunity={handleCreateOpportunity}
+  onEditColumn={handleEditColumn}
+  onDeleteColumn={handleDeleteColumn}
+  onMoveLeft={moveColumnLeft}
+  onMoveRight={moveColumnRight}
+>
 
-        </Column>
+            {
+  [...column.cards]
+    .sort((a, b) => {
 
-      ))}
+      if (!a.data) return 1;
+      if (!b.data) return -1;
 
-      <CreateColumnModal
-        onCreate={handleCreateColumn}
-      />
+      return (
+        new Date(a.data).getTime() -
+        new Date(b.data).getTime()
+      );
 
-    </div>
+    })
+    .map((card: any) => (
 
-  </div>
+              <OpportunityModal
+  key={card.id}
+  card={card}
+  onSave={handleSaveCard}
+/>
+  
 
-</DndContext>
+            ))}
+
+          </Column>
+
+        ))}
+
+        {/* NOVA COLUNA */}
+        <CreateColumnModal
+          onCreate={handleCreateColumn}
+        />
+
+      </div>
+
+    </DndContext>
   );
 }
 
