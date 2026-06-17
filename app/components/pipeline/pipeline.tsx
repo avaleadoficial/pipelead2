@@ -696,8 +696,8 @@ function Column({
      <div
   ref={setNodeRef}
   className={`
-    w-[150px]
-    min-w-[150px]
+    w-[200px]
+    min-w-[200px]
     flex-shrink-0
     bg-gray-100
     rounded-2xl
@@ -802,14 +802,14 @@ function Column({
 
         </div>
 
-        {/* NOVA OPORTUNIDADE */}
+        {/* NOVA ETAPA */}
         <button
           onClick={() =>
             setOpenOpportunityModal(true)
           }
-          className="w-full mt-4 border-2 border-dashed border-gray-300 rounded-2xl p-4 hover:bg-white transition cursor-pointer"
+          className="w-full mt-3 border-2 border-dashed border-gray-300 rounded-xl p-2 text-sm hover:bg-white transition cursor-pointer"
         >
-          + Nova oportunidade
+          + Nova Etapa
         </button>
 
         {/* MODAL */}
