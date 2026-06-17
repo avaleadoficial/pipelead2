@@ -526,13 +526,13 @@ function moveColumnRight(
     >
 
      <div
-  className="
-    flex
-    gap-4
-    overflow-x-auto
-    pb-5
-    px-2
-  "
+ className="
+  flex
+  gap-2
+  overflow-x-auto
+  pb-5
+  px-2
+"
 >
 
         {columns.map((column) => (
@@ -744,7 +744,7 @@ min-w-[200px]
     items-center
     gap-2
     font-semibold 
-    text-base
+    text-sm
     cursor-pointer
   "
 >
@@ -758,9 +758,9 @@ min-w-[200px]
     flex
     items-center
     justify-center
-    w-5
-    h-5
-    text-xs
+    w-4
+    h-4
+    text-[10px]
     rounded-full
     bg-gray-200
     text-gray-600
