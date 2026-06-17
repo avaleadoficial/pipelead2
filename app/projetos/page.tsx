@@ -41,6 +41,53 @@ console.log(data);
 
     if (error) return;
 
+    await supabase
+  .from("pipelead_columns")
+  .insert([
+    {
+      user_id: session.user.id,
+      project_id: data.id,
+      title: "Conversando",
+      position: 1,
+    },
+    {
+      user_id: session.user.id,
+      project_id: data.id,
+      title: "Quente",
+      position: 2,
+    },
+    {
+      user_id: session.user.id,
+      project_id: data.id,
+      title: "Fechou",
+      position: 3,
+    },
+    {
+      user_id: session.user.id,
+      project_id: data.id,
+      title: "Achou caro",
+      position: 4,
+    },
+    {
+      user_id: session.user.id,
+      project_id: data.id,
+      title: "Parou de responder",
+      position: 5,
+    },
+    {
+      user_id: session.user.id,
+      project_id: data.id,
+      title: "Falar em breve",
+      position: 6,
+    },
+    {
+      user_id: session.user.id,
+      project_id: data.id,
+      title: "Desqualificado",
+      position: 7,
+    },
+  ]);
+
     setProjects([
       ...projects,
       data,
