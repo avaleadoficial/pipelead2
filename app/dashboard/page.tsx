@@ -225,11 +225,9 @@ pdf.save(
     <main
   className="flex min-h-screen"
   style={{
-    backgroundColor:
-      "var(--background-color)",
-    color:
-      "var(--text-color)",
-  }}
+  backgroundColor: "#f5f5f5",
+  color: "#0f172a",
+}}
 >
 
       <Sidebar />
