@@ -244,7 +244,7 @@ pdf.save(
 >
         <div className="flex justify-between items-center">
 
-  <h1 className="text-3xl font-bold">
+  <h1 className="text-3xl font-bold mb-6">
     Dashboard
   </h1>
 
