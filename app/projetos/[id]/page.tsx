@@ -62,12 +62,10 @@ export default function ProjetoPage() {
     min-h-screen
     ml-[200px]
   "
-  style={{
-    backgroundColor:
-      "var(--background-color)",
-    color:
-      "var(--text-color)",
-  }}
+ style={{
+  backgroundColor: "#f5f5f5",
+  color: "#0f172a",
+}}
 >
 
         <h1 className="text-3xl font-bold mb-6">
