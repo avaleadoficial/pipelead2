@@ -179,7 +179,7 @@ export default function ConfiguracoesPage() {
   "
 >
 
-        <h1 className="text-5xl font-bold mb-10">
+        <h1 className="text-3xl font-bold mb-8">
           Configurações
         </h1>
 
