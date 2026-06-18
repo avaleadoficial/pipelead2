@@ -1,5 +1,6 @@
 "use client";
 
+import { supabase } from "@/lib/supabase";
 import { useEffect, useState } from "react";
 
 export default function MobileDashboard() {
@@ -7,64 +8,52 @@ export default function MobileDashboard() {
   const [totalProjects, setTotalProjects] = useState(0);
   const [projectStats, setProjectStats] = useState<any[]>([]);
 
-  useEffect(() => {
-    const savedProjects =
-      localStorage.getItem("projects");
+ useEffect(() => {
 
-    let totalLeadsCount = 0;
-    const stats: any[] = [];
+  async function loadDashboard() {
 
-    if (savedProjects) {
-      const projects =
-        JSON.parse(savedProjects);
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
 
-      projects.forEach(
-        (project: any) => {
+    if (!session) return;
 
-          const savedPipeline =
-            localStorage.getItem(
-              `pipeline-${project.id}`
-            );
+    const { data: projects } =
+      await supabase
+        .from("pipelead_projects")
+        .select("*")
+        .eq(
+          "user_id",
+          session.user.id
+        );
 
-          if (!savedPipeline)
-            return;
+    const { data: leads } =
+      await supabase
+        .from("pipelead_leads")
+        .select("*")
+        .eq(
+          "user_id",
+          session.user.id
+        );
 
-          const columns =
-            JSON.parse(savedPipeline);
+    setTotalProjects(
+      projects?.length || 0
+    );
 
-          let total = 0;
+    setTotalLeads(
+      leads?.length || 0
+    );
 
-          columns.forEach(
-            (column: any) => {
-              total +=
-                column.cards?.length || 0;
-            }
-          );
+    setProjectStats(
+      projects || []
+    );
 
-          totalLeadsCount += total;
+  }
 
-          stats.push({
-            name: project.name,
-            total,
-            columns:
-              columns.filter(
-                (column: any) =>
-                  column.cards?.length > 0
-              ),
-          });
-        }
-      );
+  loadDashboard();
 
-      setTotalProjects(
-        projects.length
-      );
-    }
-
-    setProjectStats(stats);
-    setTotalLeads(totalLeadsCount);
-
-  }, []);
-
+}, []);
+  
   return (
     <main className="min-h-screen bg-gray-100 p-4 pb-24">
 
@@ -128,43 +117,16 @@ export default function MobileDashboard() {
               </h3>
 
               <p className="text-gray-500 mt-1">
-                {project.total}
-                {" "}
-                oportunidades
-              </p>
+  ID: {project.id}
+</p>
 
-              <div className="mt-4 space-y-2">
+             <div className="mt-2">
 
-                {project.columns.map(
-                  (column: any) => (
+  <p className="text-gray-500">
+    Projeto ativo
+  </p>
 
-                    <div
-                      key={column.title}
-                      className="
-                        flex
-                        justify-between
-                        items-center
-                        bg-gray-50
-                        rounded-xl
-                        px-3
-                        py-2
-                      "
-                    >
-
-                      <span>
-                        {column.title}
-                      </span>
-
-                      <span className="font-semibold">
-                        {column.cards.length}
-                      </span>
-
-                    </div>
-
-                  )
-                )}
-
-              </div>
+</div>
 
             </div>
 
