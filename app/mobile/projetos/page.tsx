@@ -10,22 +10,32 @@ export default function MobileProjetosPage() {
 
   useEffect(() => {
 
-    async function loadProjects() {
+  async function loadProjects() {
 
-      const {
-        data,
-        error,
-      } = await supabase
-        .from("pipelead-projects")
-        .select("*");
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
-      console.log(data);
+  if (!session) return;
 
-      if (!error && data) {
-        setProjects(data);
-      }
+  const {
+    data,
+    error,
+  } = await supabase
+    .from("pipelead_projects")
+    .select("*")
+    .eq(
+      "user_id",
+      session.user.id
+    );
 
-    }
+  console.log(data);
+
+  if (!error && data) {
+    setProjects(data);
+  }
+
+}
 
     loadProjects();
 
