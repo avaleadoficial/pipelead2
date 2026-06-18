@@ -695,8 +695,10 @@ function Column({
      <div
   ref={setNodeRef}
   className={`
-    w-[170px]
-    min-w-[170px]
+    w-[85vw]
+min-w-[85vw]
+md:w-[170px]
+md:min-w-[170px]
     flex-shrink-0
     bg-gray-100
     rounded-2xl
