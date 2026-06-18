@@ -1,5 +1,6 @@
 "use client";
 
+import { supabase } from "@/lib/supabase";
 import { useEffect, useState } from "react";
 
 export default function MobileConfiguracoesPage() {
@@ -10,123 +11,79 @@ export default function MobileConfiguracoesPage() {
   const [logo, setLogo] =
     useState("");
 
-  const [sidebarColor, setSidebarColor] =
-    useState("#000000");
-
-  const [sidebarTextColor, setSidebarTextColor] =
-    useState("#ffffff");
-
-  const [backgroundColor, setBackgroundColor] =
-    useState("#f5f5f5");
-
-  const [textColor, setTextColor] =
-    useState("#111111");
-
   useEffect(() => {
 
-    const savedSidebar =
-      localStorage.getItem(
-        "sidebar-color"
+    async function loadSettings() {
+
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session) return;
+
+      const { data } =
+        await supabase
+          .from("pipelead_settings")
+          .select("*")
+          .eq(
+            "user_id",
+            session.user.id
+          )
+          .single();
+
+      if (!data) return;
+
+      setCompanyName(
+        data.company_name || ""
       );
 
-    const savedSidebarText =
-      localStorage.getItem(
-        "sidebar-text-color"
+      setLogo(
+        data.company_logo || ""
       );
 
-    const savedBg =
-      localStorage.getItem(
-        "background-color"
-      );
+    }
 
-    const savedText =
-      localStorage.getItem(
-        "text-color"
-      );
-
-    const savedName =
-      localStorage.getItem(
-        "company-name"
-      );
-
-    const savedLogo =
-      localStorage.getItem(
-        "company-logo"
-      );
-
-    if (savedSidebar)
-      setSidebarColor(savedSidebar);
-
-    if (savedSidebarText)
-      setSidebarTextColor(savedSidebarText);
-
-    if (savedBg)
-      setBackgroundColor(savedBg);
-
-    if (savedText)
-      setTextColor(savedText);
-
-    if (savedName)
-      setCompanyName(savedName);
-
-    if (savedLogo)
-      setLogo(savedLogo);
+    loadSettings();
 
   }, []);
 
-  function handleSave() {
+  async function handleSave() {
 
-    localStorage.setItem(
-      "sidebar-color",
-      sidebarColor
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    if (!session) return;
+
+    const payload = {
+      user_id: session.user.id,
+      company_name: companyName,
+      company_logo: logo,
+    };
+
+    const { error } =
+      await supabase
+        .from("pipelead_settings")
+        .upsert(payload, {
+          onConflict: "user_id",
+        });
+
+    if (error) {
+
+      console.error(error);
+
+      alert(
+        "Erro ao salvar"
+      );
+
+      return;
+
+    }
+
+    alert(
+      "Configurações salvas!"
     );
 
-    localStorage.setItem(
-      "sidebar-text-color",
-      sidebarTextColor
-    );
-
-    localStorage.setItem(
-      "background-color",
-      backgroundColor
-    );
-
-    localStorage.setItem(
-      "text-color",
-      textColor
-    );
-
-    localStorage.setItem(
-      "company-name",
-      companyName
-    );
-
-    localStorage.setItem(
-      "company-logo",
-      logo
-    );
-
-    document.documentElement.style.setProperty(
-      "--sidebar-color",
-      sidebarColor
-    );
-
-    document.documentElement.style.setProperty(
-      "--sidebar-text-color",
-      sidebarTextColor
-    );
-
-    document.documentElement.style.setProperty(
-      "--background-color",
-      backgroundColor
-    );
-
-    document.documentElement.style.setProperty(
-      "--text-color",
-      textColor
-    );
-
-    alert("Configurações salvas!");
   }
 
   function handleLogoUpload(
@@ -150,6 +107,7 @@ export default function MobileConfiguracoesPage() {
     };
 
     reader.readAsDataURL(file);
+
   }
 
   return (
@@ -157,16 +115,19 @@ export default function MobileConfiguracoesPage() {
     <main
       className="
         min-h-screen
+        bg-gray-100
         p-4
         pb-24
       "
-      style={{
-        backgroundColor,
-        color: textColor,
-      }}
     >
 
-      <h1 className="text-3xl font-bold mb-6">
+      <h1
+        className="
+          text-3xl
+          font-bold
+          mb-6
+        "
+      >
         Configurações
       </h1>
 
@@ -182,7 +143,13 @@ export default function MobileConfiguracoesPage() {
 
         <div>
 
-          <label className="block mb-2">
+          <label
+            className="
+              block
+              mb-2
+              font-medium
+            "
+          >
             Nome da empresa
           </label>
 
@@ -198,7 +165,6 @@ export default function MobileConfiguracoesPage() {
               border
               rounded-2xl
               p-4
-              text-black
             "
           />
 
@@ -206,17 +172,24 @@ export default function MobileConfiguracoesPage() {
 
         <div>
 
-          <label className="block mb-2">
-            Logo
+          <label
+            className="
+              block
+              mb-2
+              font-medium
+            "
+          >
+            Logo da empresa
           </label>
 
           <label
             className="
               bg-black
               text-white
-              px-4
+              px-5
               py-3
               rounded-2xl
+              cursor-pointer
               inline-block
             "
           >
@@ -226,7 +199,9 @@ export default function MobileConfiguracoesPage() {
             <input
               type="file"
               accept="image/*"
-              onChange={handleLogoUpload}
+              onChange={
+                handleLogoUpload
+              }
               className="hidden"
             />
 
@@ -249,102 +224,6 @@ export default function MobileConfiguracoesPage() {
 
         </div>
 
-        <div className="space-y-5">
-
-          <div>
-
-            <label>
-              Cor Sidebar
-            </label>
-
-            <input
-              type="color"
-              value={sidebarColor}
-              onChange={(e) =>
-                setSidebarColor(
-                  e.target.value
-                )
-              }
-              className="
-                w-full
-                h-14
-                mt-2
-              "
-            />
-
-          </div>
-
-          <div>
-
-            <label>
-              Texto Sidebar
-            </label>
-
-            <input
-              type="color"
-              value={sidebarTextColor}
-              onChange={(e) =>
-                setSidebarTextColor(
-                  e.target.value
-                )
-              }
-              className="
-                w-full
-                h-14
-                mt-2
-              "
-            />
-
-          </div>
-
-          <div>
-
-            <label>
-              Cor Fundo
-            </label>
-
-            <input
-              type="color"
-              value={backgroundColor}
-              onChange={(e) =>
-                setBackgroundColor(
-                  e.target.value
-                )
-              }
-              className="
-                w-full
-                h-14
-                mt-2
-              "
-            />
-
-          </div>
-
-          <div>
-
-            <label>
-              Cor Texto
-            </label>
-
-            <input
-              type="color"
-              value={textColor}
-              onChange={(e) =>
-                setTextColor(
-                  e.target.value
-                )
-              }
-              className="
-                w-full
-                h-14
-                mt-2
-              "
-            />
-
-          </div>
-
-        </div>
-
         <button
           onClick={handleSave}
           className="
@@ -353,6 +232,7 @@ export default function MobileConfiguracoesPage() {
             text-white
             py-4
             rounded-2xl
+            cursor-pointer
           "
         >
           Salvar configurações
@@ -363,4 +243,5 @@ export default function MobileConfiguracoesPage() {
     </main>
 
   );
+
 }
