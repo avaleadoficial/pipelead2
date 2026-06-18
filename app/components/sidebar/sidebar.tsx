@@ -53,27 +53,9 @@ const [projectName, setProjectName] =
   useState("");
 
 
- useEffect(() => {
+useEffect(() => {
 
   async function loadData() {
-
-    const savedName =
-      localStorage.getItem(
-        "company-name"
-      );
-
-    const savedLogo =
-      localStorage.getItem(
-        "company-logo"
-      );
-
-    if (savedName) {
-      setCompanyName(savedName);
-    }
-
-    if (savedLogo) {
-      setLogo(savedLogo);
-    }
 
     const {
       data: { session },
@@ -81,7 +63,33 @@ const [projectName, setProjectName] =
 
     if (!session) return;
 
-    const { data, error } =
+    const { data: settings } =
+      await supabase
+        .from("pipelead_settings")
+        .select(
+          "company_name, company_logo"
+        )
+        .eq(
+          "user_id",
+          session.user.id
+        )
+        .single();
+
+    if (settings) {
+
+      setCompanyName(
+        settings.company_name ||
+        "Cliente"
+      );
+
+      setLogo(
+        settings.company_logo ||
+        ""
+      );
+
+    }
+
+    const { data } =
       await supabase
         .from("pipelead_projects")
         .select("*")
@@ -89,9 +97,6 @@ const [projectName, setProjectName] =
           "user_id",
           session.user.id
         );
-
-    console.log("PROJECTS:", data);
-    console.log("ERROR:", error);
 
     if (data) {
       setProjects(data);
@@ -102,7 +107,7 @@ const [projectName, setProjectName] =
   loadData();
 
 }, []);
-async function createProject() {
+    async function createProject() {
 
   console.log("CLICOU");
 
@@ -529,7 +534,8 @@ async function renameProject() {
       {/* TOPO */}
       <div className="mb-10">
 
-        <h1 className="text-2xl font-bold">
+        <h1 className="text-2xl font-bold text-white">
+
   PipeLead
 </h1>
 
@@ -755,64 +761,83 @@ px-3
       </nav>
 
       {/* FOOTER */}
-      <div className="border-t border-white/10 pt-5">
-
-        <div className="flex items-center gap-3 mb-4">
-
-          {logo && (
-
-            <img
-  src={logo}
-  alt="Logo"
+      <div
   className="
-    w-12
-    h-12
-    rounded-full
-    object-cover
-  "
-/>
-
-          )}
-
-          <div>
-
-            <p className="font-bold text-sm">
-              {companyName}
-            </p>
-
-            <p className="text-xs opacity-70">
-              Cliente
-            </p>
-
-          </div>
-
-        </div>
-
-        {/* SAIR */}
-        <button
-  onClick={async () => {
-
-  await supabase.auth.signOut();
-
-  router.push("/login");
-
-}}
-  className="
-    w-full
-    bg-white/10
-    hover:bg-white/20
-    transition
-    rounded-xl
-    p-3
-    text-sm
-    cursor-pointer
+    border-t
+    border-white/10
+    pt-5
   "
 >
-  Sair
-</button>
 
-      </div>
+  <div
+    className="
+      flex
+      flex-col
+      items-center
+      mb-4
+    "
+  >
 
+    {logo && (
+
+      <img
+        src={logo}
+        alt="Logo"
+        className="
+          w-16
+          h-16
+          rounded-full
+          object-cover
+          mb-3
+        "
+      />
+
+    )}
+
+    <p
+      className="
+        font-semibold
+        text-sm
+        text-center
+      "
+    >
+      {companyName}
+    </p>
+
+    <p
+      className="
+        text-xs
+        opacity-70
+      "
+    >
+      Cliente
+    </p>
+
+  </div>
+
+  <button
+    onClick={async () => {
+
+      await supabase.auth.signOut();
+
+      router.push("/login");
+
+    }}
+    className="
+      w-full
+      bg-white/10
+      hover:bg-white/20
+      transition
+      rounded-xl
+      p-3
+      text-sm
+      cursor-pointer
+    "
+  >
+    Sair
+  </button>
+
+</div>
         </aside>
   </>
 );
