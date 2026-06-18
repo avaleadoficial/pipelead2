@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 export default function MobileProjetoPage() {
 
@@ -18,21 +19,25 @@ export default function MobileProjetoPage() {
 
   useEffect(() => {
 
-    const savedProjects =
-      localStorage.getItem(
-        "projects"
-      );
+    async function loadProject() {
 
-    if (savedProjects) {
+      const {
+        data: { session },
+      } =
+        await supabase.auth.getSession();
 
-      const projects =
-        JSON.parse(savedProjects);
+      if (!session) return;
 
-      const project =
-        projects.find(
-          (p: any) =>
-            p.id === projectId
-        );
+      const { data: project } =
+        await supabase
+          .from("pipelead_projects")
+          .select("*")
+          .eq("id", projectId)
+          .eq(
+            "user_id",
+            session.user.id
+          )
+          .single();
 
       if (project) {
 
@@ -42,20 +47,39 @@ export default function MobileProjetoPage() {
 
       }
 
+      const { data: leads } =
+        await supabase
+          .from("pipelead_leads")
+          .select("*")
+          .eq(
+            "project_id",
+            projectId
+          );
+
+      const grouped = [
+        "Conversando",
+        "Quente",
+        "Fechou",
+        "Achou caro",
+        "Falar em breve",
+        "Parou de responder",
+        "Desqualificado",
+      ].map((column) => ({
+        id: column,
+        title: column,
+        cards:
+          leads?.filter(
+            (lead: any) =>
+              lead.column_name ===
+              column
+          ) || [],
+      }));
+
+      setColumns(grouped);
+
     }
 
-    const savedPipeline =
-      localStorage.getItem(
-        `pipeline-${projectId}`
-      );
-
-    if (savedPipeline) {
-
-      setColumns(
-        JSON.parse(savedPipeline)
-      );
-
-    }
+    loadProject();
 
   }, [projectId]);
 
