@@ -1,10 +1,12 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
 export default function MobileProjetoPage() {
+
+  const router = useRouter();
 
   const params = useParams();
 
@@ -83,46 +85,99 @@ export default function MobileProjetoPage() {
 
   }, [projectId]);
 
-  return (
+ return (
 
-    <main className="min-h-screen bg-gray-100 p-4 pb-24">
+  <main className="min-h-screen bg-gray-100 p-4 pb-24">
 
-      <h1 className="text-3xl font-bold mb-6">
-        {projectName}
-      </h1>
+    <button
+      onClick={() => router.back()}
+      className="
+        mb-4
+        text-sm
+        opacity-70
+      "
+    >
+      ← Voltar
+    </button>
 
-      <div className="space-y-4">
+    <h1 className="text-3xl font-bold mb-6">
+      {projectName}
+    </h1>
 
-        {columns.map(
-          (column) => (
+      <div
+  className="
+    flex
+    gap-4
+    overflow-x-auto
+    pb-4
+  "
+>
+
+       {columns.map(
+  (column) => (
+
+    <div
+  key={column.id}
+  className="
+    min-w-[300px]
+    max-w-[300px]
+    bg-white
+    rounded-3xl
+    p-4
+    shadow
+    shrink-0
+  "
+>
+      <div className="flex justify-between">
+
+        <h2 className="font-bold">
+          {column.title}
+        </h2>
+
+        <span>
+          {column.cards.length}
+        </span>
+
+      </div>
+
+      <div className="mt-4 space-y-3">
+
+        {column.cards.map(
+          (lead: any) => (
 
             <div
-              key={column.id}
+              key={lead.id}
               className="
-                bg-white
-                rounded-3xl
-                p-4
-                shadow
+                bg-gray-50
+                rounded-2xl
+                p-3
               "
             >
 
-              <div className="flex justify-between">
+              <p className="font-semibold">
+                {lead.name}
+              </p>
 
-                <h2 className="font-bold">
-                  {column.title}
-                </h2>
-
-                <span>
-                  {column.cards.length}
-                </span>
-
-              </div>
+              <p
+                className="
+                  text-sm
+                  text-gray-500
+                "
+              >
+                {lead.phone}
+              </p>
 
             </div>
 
           )
         )}
 
+      </div>
+
+    </div>
+
+  )
+)}
       </div>
 
     </main>
