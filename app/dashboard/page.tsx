@@ -182,11 +182,7 @@ if (button) {
   element,
   {
     cacheBust: true,
-    pixelRatio: 2,
-    canvasWidth:
-      element.scrollWidth,
-    canvasHeight:
-      element.scrollHeight,
+    pixelRatio: 3,
   }
 );
 
@@ -285,7 +281,6 @@ pdf.save(
       <Sidebar />
 
       <section
-  id="dashboard-report"
   className="
     flex-1
     p-8
@@ -315,6 +310,10 @@ pdf.save(
 </button>
 
 </div>
+        <div
+  id="dashboard-report"
+  className="bg-white p-8"
+>
 
         <div className="grid grid-cols-2 gap-5 mt-8">
 
@@ -398,7 +397,7 @@ pdf.save(
   <div
   className="
     grid
-    grid-cols-[1fr_380px]
+    grid-cols-[1fr_300px]
     items-center
   "
 >
@@ -423,7 +422,7 @@ pdf.save(
     justify-end
     items-center
     gap-8
-    w-[380px]
+    w-[300px]
     ml-auto
   "
 >
@@ -517,6 +516,7 @@ pdf.save(
   </div>
 
 </div>
+          </div>
       </section>
 
     </main>
