@@ -104,11 +104,13 @@ export default function MobileProjetoPage() {
       {projectName}
     </h1>
 
-      <div
+     <div
   className="
     flex
     gap-4
     overflow-x-auto
+    snap-x
+    snap-mandatory
     pb-4
   "
 >
@@ -119,13 +121,13 @@ export default function MobileProjetoPage() {
     <div
   key={column.id}
   className="
-    min-w-[300px]
-    max-w-[300px]
+    w-[85vw]
     bg-white
     rounded-3xl
     p-4
     shadow
     shrink-0
+    snap-center
   "
 >
       <div className="flex justify-between">
