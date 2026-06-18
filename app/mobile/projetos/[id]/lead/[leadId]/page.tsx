@@ -34,13 +34,7 @@ export default function MobileLeadPage() {
   }, [leadId]);
 
   if (!lead) {
-
-    return (
-      <div className="p-4">
-        Carregando...
-      </div>
-    );
-
+    return <div className="p-4">Carregando...</div>;
   }
 
   return (
@@ -51,42 +45,23 @@ export default function MobileLeadPage() {
         {lead.name}
       </h1>
 
-      <div className="bg-white rounded-3xl p-5 shadow space-y-4">
+      <div className="bg-white rounded-3xl p-5 shadow">
 
-        <div>
-          <p className="text-gray-500">
-            Telefone
-          </p>
+        <p>
+          <strong>Telefone:</strong>
+          {" "}
+          {lead.phone}
+        </p>
 
-          <p>
-            {lead.phone}
-          </p>
-        </div>
-
-        <div>
-          <p className="text-gray-500">
-            Status
-          </p>
-
-          <p>
-            {lead.column_name}
-          </p>
-        </div>
-
-        <div>
-          <p className="text-gray-500">
-            Observações
-          </p>
-
-          <p>
-            {lead.notes || "-"}
-          </p>
-        </div>
+        <p className="mt-3">
+          <strong>Status:</strong>
+          {" "}
+          {lead.column_name}
+        </p>
 
       </div>
 
     </main>
 
   );
-
 }
