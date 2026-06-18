@@ -1,8 +1,21 @@
 "use client";
 
 import Link from "next/link";
+import { supabase } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
 
 export function MobileNav() {
+
+  const router = useRouter();
+
+  async function handleLogout() {
+
+    await supabase.auth.signOut();
+
+    router.replace("/login");
+
+  }
+
   return (
     <nav
       className="
@@ -29,6 +42,14 @@ export function MobileNav() {
       <Link href="/mobile/configuracoes">
         Configurações
       </Link>
+
+      <button
+        onClick={handleLogout}
+        className="text-red-500"
+      >
+        Sair
+      </button>
+
     </nav>
   );
 }
