@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import Link from "next/link";
 
 export default function MobileProjetosPage() {
 
@@ -55,19 +56,27 @@ export default function MobileProjetosPage() {
 
       {projects.map((project) => (
 
-        <div
-          key={project.id}
-          className="
-            border
-            rounded-xl
-            p-4
-            mt-4
-          "
-        >
-          {project.name}
-        </div>
+  <Link
+    key={project.id}
+    href={`/mobile/projetos/${project.id}`}
+  >
 
-      ))}
+    <div
+      className="
+        border
+        rounded-xl
+        p-4
+        mt-4
+        bg-white
+        shadow
+      "
+    >
+      {project.name}
+    </div>
+
+  </Link>
+
+))}
 
     </main>
 
