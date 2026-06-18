@@ -25,6 +25,9 @@ const [totalProjects, setTotalProjects] =
 const [projectStats, setProjectStats] =
   useState<any[]>([]);
 
+const [companyName, setCompanyName] =
+  useState("Cliente");
+
  useEffect(() => {
 
   async function loadDashboard() {
@@ -34,6 +37,24 @@ const [projectStats, setProjectStats] =
     } = await supabase.auth.getSession();
 
     if (!session) return;
+
+    const { data: settings } =
+  await supabase
+    .from("pipelead_settings")
+    .select("company_name")
+    .eq(
+      "user_id",
+      session.user.id
+    )
+    .single();
+
+if (settings?.company_name) {
+
+  setCompanyName(
+    settings.company_name
+  );
+
+}
 
     const { data: projects } =
       await supabase
@@ -147,6 +168,16 @@ async function exportPDF() {
 
   if (!element) return;
 
+const button =
+  document.querySelector(
+    ".no-print"
+  ) as HTMLElement;
+
+if (button) {
+  button.style.display = "none";
+}
+
+  
   const dataUrl = await toPng(
   element,
   {
@@ -159,6 +190,9 @@ async function exportPDF() {
   }
 );
 
+  if (button) {
+  button.style.display = "block";
+}
   const pdf =
     new jsPDF(
       "p",
@@ -169,9 +203,7 @@ async function exportPDF() {
     // TÍTULO
 
   const cliente =
-  localStorage.getItem(
-    "company-name"
-  ) || "Cliente";
+  companyName;
 
 const dataAtual =
   new Date().toLocaleDateString(
@@ -237,7 +269,7 @@ pdf.text(
   
 
 pdf.save(
-  `Relatorio-${cliente}-${dataAtual}.pdf`
+  `Relatorio-${companyName}-${dataAtual}.pdf`
 );
 }
   return (
@@ -266,20 +298,21 @@ pdf.save(
     Dashboard
   </h1>
 
-  <button
-    onClick={exportPDF}
-    className="
-      bg-black
-      text-white
-      px-5
-      py-3
-      rounded-2xl
-      hover:opacity-90
-      cursor-pointer
-    "
-  >
-    Exportar Relatório PDF
-  </button>
+ <button
+  onClick={exportPDF}
+  className="
+    no-print
+    bg-black
+    text-white
+    px-5
+    py-3
+    rounded-2xl
+    hover:opacity-90
+    cursor-pointer
+  "
+>
+  Exportar Relatório PDF
+</button>
 
 </div>
 
