@@ -427,12 +427,16 @@ pdf.save(
   "
 >
 
-  <div
+ <div
   className="
     w-48
     h-48
     shrink-0
   "
+  style={{
+    minWidth: "192px",
+    minHeight: "192px",
+  }}
 >
 
     <ProjectChart
