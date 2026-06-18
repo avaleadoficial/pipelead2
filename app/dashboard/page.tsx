@@ -57,9 +57,29 @@ const [projectStats, setProjectStats] =
       projects?.length || 0
     );
 
-    setTotalLeads(
-      leads?.length || 0
-    );
+   const totalOpportunities =
+  (projects || []).reduce(
+    (
+      total: number,
+      project: any
+    ) => {
+
+      const count =
+        (leads || []).filter(
+          (lead: any) =>
+            lead.project_id ===
+            project.id
+        ).length;
+
+      return total + count;
+
+    },
+    0
+  );
+
+setTotalLeads(
+  totalOpportunities
+);
 
     const stats =
       (projects || []).map(
