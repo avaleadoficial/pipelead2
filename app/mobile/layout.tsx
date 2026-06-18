@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { MobileNav } from "../components/mobile/mobile-nav";
-import { MobileHeader } from "../components/mobile/mobile-header";
+import { MobileHeader } from "./mobile-header";
 
 export default function MobileLayout({
   children,
