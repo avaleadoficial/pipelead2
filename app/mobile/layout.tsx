@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { MobileNav } from "../components/mobile/mobile-nav";
+import { MobileHeader } from "../components/mobile/mobile-header";
 
 export default function MobileLayout({
   children,
@@ -43,20 +44,35 @@ export default function MobileLayout({
   if (loading) {
 
     return (
-      <div className="p-6">
-        Carregando...
-      </div>
+      <div
+  className="
+    min-h-screen
+    flex
+    items-center
+    justify-center
+  "
+>
+  Carregando...
+</div>
     );
 
   }
 
   return (
     <>
-      <main className="min-h-screen pb-20">
-        {children}
-      </main>
+  <MobileHeader />
 
-      <MobileNav />
-    </>
+ <main
+  className="
+    min-h-screen
+    pt-24
+    pb-20
+  "
+>
+  {children}
+</main>
+
+  <MobileNav />
+</>
   );
 }
