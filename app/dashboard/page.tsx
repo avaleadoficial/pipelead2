@@ -168,14 +168,7 @@ async function exportPDF() {
 
   if (!element) return;
 
-const button =
-  document.querySelector(
-    ".no-print"
-  ) as HTMLElement;
 
-if (button) {
-  button.style.display = "none";
-}
 
   
   const dataUrl = await toPng(
@@ -186,9 +179,7 @@ if (button) {
   }
 );
 
-  if (button) {
-  button.style.display = "block";
-}
+  
   const pdf =
     new jsPDF(
       "p",
@@ -234,33 +225,78 @@ const imgProps =
     dataUrl
   );
 
-const pdfWidth = 190;
+const pdfWidth = 180;
 
 const pdfHeight =
   (imgProps.height *
     pdfWidth) /
   imgProps.width;
 
+const pageHeight =
+  pdf.internal.pageSize.height;
+
+let heightLeft =
+  pdfHeight;
+
+let position = 30;
+
 pdf.addImage(
   dataUrl,
   "PNG",
   10,
-  30,
+  position,
   pdfWidth,
   pdfHeight
 );
 
-// RODAPÉ
-pdf.setFontSize(8);
+heightLeft -=
+  (pageHeight - 30);
 
-pdf.text(
-  "AVALEAD",
-  105,
-  290,
-  {
-    align: "center",
-  }
-);
+while (heightLeft > 0) {
+
+  position =
+    heightLeft - pdfHeight + 30;
+
+  pdf.addPage();
+
+  pdf.addImage(
+    dataUrl,
+    "PNG",
+    10,
+    position,
+    pdfWidth,
+    pdfHeight
+  );
+
+  heightLeft -=
+    pageHeight;
+
+}
+  
+// RODAPÉ
+const totalPages =
+  pdf.getNumberOfPages();
+
+for (
+  let i = 1;
+  i <= totalPages;
+  i++
+) {
+
+  pdf.setPage(i);
+
+  pdf.setFontSize(8);
+
+  pdf.text(
+    "AVALEAD",
+    105,
+    290,
+    {
+      align: "center",
+    }
+  );
+
+}
 
   
 
@@ -310,9 +346,14 @@ pdf.save(
 </button>
 
 </div>
-        <div
+       <div
   id="dashboard-report"
-  className="bg-white p-8"
+  className="
+    bg-white
+    p-8
+    max-w-[1200px]
+    mx-auto
+  "
 >
 
         <div className="grid grid-cols-2 gap-5 mt-8">
@@ -394,10 +435,10 @@ pdf.save(
   }}
 >
 
-  <div
+ <div
   className="
     grid
-    grid-cols-[1fr_auto]
+    grid-cols-[1fr_450px]
     items-center
   "
 >
@@ -420,8 +461,8 @@ pdf.save(
   className="
     flex
     items-center
-    gap-6
-    justify-end
+    justify-between
+    w-[450px]
   "
 >
 
@@ -431,10 +472,6 @@ pdf.save(
     h-48
     shrink-0
   "
-  style={{
-    minWidth: "192px",
-    minHeight: "192px",
-  }}
 >
 
     <ProjectChart
@@ -445,7 +482,7 @@ pdf.save(
 
   <div
   className="
-    min-w-[170px]
+    w-[180px]
     space-y-2
   "
 >
