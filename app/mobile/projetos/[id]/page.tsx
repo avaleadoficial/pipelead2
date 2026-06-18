@@ -144,36 +144,42 @@ export default function MobileProjetoPage() {
 
       <div className="mt-4 space-y-3">
 
-        {column.cards.map(
-          (lead: any) => (
+       {column.cards.map(
+  (lead: any) => (
 
-            <div
-              key={lead.id}
-              className="
-                bg-gray-50
-                rounded-2xl
-                p-3
-              "
-            >
+    <Link
+      key={lead.id}
+      href={`/mobile/projetos/${projectId}/lead/${lead.id}`}
+    >
 
-              <p className="font-semibold">
-                {lead.name}
-              </p>
+      <div
+        className="
+          bg-gray-50
+          rounded-2xl
+          p-3
+          cursor-pointer
+        "
+      >
 
-              <p
-                className="
-                  text-sm
-                  text-gray-500
-                "
-              >
-                {lead.phone}
-              </p>
+        <p className="font-semibold">
+          {lead.name}
+        </p>
 
-            </div>
+        <p
+          className="
+            text-sm
+            text-gray-500
+          "
+        >
+          {lead.phone}
+        </p>
 
-          )
-        )}
+      </div>
 
+    </Link>
+
+  )
+)}
       </div>
 
     </div>
