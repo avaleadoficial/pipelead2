@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 export default function MobileDashboard() {
   const [totalLeads, setTotalLeads] = useState(0);
   const [totalProjects, setTotalProjects] = useState(0);
-  const [projectStats, setProjectStats] = useState<any[]>([]);
 
  useEffect(() => {
 
@@ -40,13 +39,29 @@ export default function MobileDashboard() {
       projects?.length || 0
     );
 
-    setTotalLeads(
-      leads?.length || 0
-    );
+    const totalOpportunities =
+  (projects || []).reduce(
+    (
+      total: number,
+      project: any
+    ) => {
 
-    setProjectStats(
-      projects || []
-    );
+      const count =
+        (leads || []).filter(
+          (lead: any) =>
+            lead.project_id ===
+            project.id
+        ).length;
+
+      return total + count;
+
+    },
+    0
+  );
+
+setTotalLeads(
+  totalOpportunities
+);
 
   }
 
@@ -93,47 +108,7 @@ export default function MobileDashboard() {
 
       </div>
 
-      <h2 className="text-2xl font-bold mt-8 mb-4">
-        Projetos
-      </h2>
-
-      <div className="space-y-4">
-
-        {projectStats.map(
-          (project) => (
-
-            <div
-              key={project.name}
-              className="
-                bg-white
-                rounded-3xl
-                p-5
-                shadow
-              "
-            >
-
-              <h3 className="font-bold text-lg">
-                {project.name}
-              </h3>
-
-              <p className="text-gray-500 mt-1">
-  ID: {project.id}
-</p>
-
-             <div className="mt-2">
-
-  <p className="text-gray-500">
-    Projeto ativo
-  </p>
-
-</div>
-
-            </div>
-
-          )
-        )}
-
-      </div>
+  
 
     </main>
   );
