@@ -21,9 +21,24 @@ export default function LoginPage() {
 
       if (session) {
 
-        router.replace("/dashboard");
+  const isMobile =
+    window.innerWidth < 768;
 
-      }
+  if (isMobile) {
+
+    router.replace(
+      "/mobile/dashboard"
+    );
+
+  } else {
+
+    router.replace(
+      "/dashboard"
+    );
+
+  }
+
+}
 
     }
 
@@ -44,7 +59,22 @@ export default function LoginPage() {
       return;
     }
 
-    router.push("/dashboard");
+    const isMobile =
+  window.innerWidth < 768;
+
+if (isMobile) {
+
+  router.push(
+    "/mobile/dashboard"
+  );
+
+} else {
+
+  router.push(
+    "/dashboard"
+  );
+
+}
   }
 
   return (
