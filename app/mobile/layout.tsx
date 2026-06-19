@@ -62,10 +62,10 @@ export default function MobileLayout({
     <>
   <MobileHeader />
 
- <main
+<main
   className="
     min-h-screen
-    pt-24
+    pt-16
     pb-20
   "
 >
