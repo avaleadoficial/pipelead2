@@ -51,18 +51,24 @@ export function MobileHeader() {
   return (
 
     <header
-      className="
-        fixed
-        top-0
-        left-0
-        right-0
-        bg-white
-        border-b
-        z-50
-        px-4
-        py-3
-      "
-    >
+  className="
+  fixed
+  top-0
+  left-0
+  right-0
+  h-16
+  border-b
+  z-50
+  px-4
+  flex
+  items-center
+"
+  style={{
+    backgroundColor: "var(--sidebar-color)",
+    color: "var(--sidebar-text-color)",
+    borderColor: "#3f3f46",
+  }}
+>
 
       <div
         className="
@@ -74,23 +80,26 @@ export function MobileHeader() {
 
         <div>
 
-          <h1
-            className="
-              font-bold
-              text-lg
-            "
-          >
-            PipeLead CRM
-          </h1>
+         <h1
+  className="
+    font-bold
+    text-lg
+  "
+  style={{
+    color: "var(--sidebar-text-color)",
+  }}
+>
+  PipeLead CRM
+</h1>
 
           <p
-            className="
-              text-xs
-              text-gray-500
-            "
-          >
-            {companyName}
-          </p>
+  className="text-xs"
+  style={{
+    color: "rgba(255,255,255,0.7)",
+  }}
+>
+  {companyName}
+</p>
 
         </div>
 
