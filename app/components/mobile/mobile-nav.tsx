@@ -18,37 +18,59 @@ export function MobileNav() {
 
   return (
     <nav
-      className="
-        fixed
-        bottom-0
-        left-0
-        right-0
-        bg-white
-        border-t
-        flex
-        justify-around
-        py-4
-        z-50
-      "
-    >
-      <Link href="/mobile/dashboard">
-        Dashboard
-      </Link>
+  className="
+    fixed
+    bottom-0
+    left-0
+    right-0
+    border-t
+    flex
+    justify-around
+    items-center
+    h-16
+    z-50
+  "
+  style={{
+    backgroundColor: "var(--sidebar-color)",
+    color: "var(--sidebar-text-color)",
+    borderColor: "#3f3f46",
+  }}
+>
+      <Link
+  href="/mobile/dashboard"
+  style={{
+    color: "var(--sidebar-text-color)",
+  }}
+>
+  Dashboard
+</Link>
 
-      <Link href="/mobile/projetos">
-        Projetos
-      </Link>
+<Link
+  href="/mobile/projetos"
+  style={{
+    color: "var(--sidebar-text-color)",
+  }}
+>
+  Projetos
+</Link>
 
-      <Link href="/mobile/configuracoes">
-        Configurações
-      </Link>
+<Link
+  href="/mobile/configuracoes"
+  style={{
+    color: "var(--sidebar-text-color)",
+  }}
+>
+  Configurações
+</Link>
 
-      <button
-        onClick={handleLogout}
-        className="text-red-500"
-      >
-        Sair
-      </button>
+     <button
+  onClick={handleLogout}
+  style={{
+    color: "#ef4444",
+  }}
+>
+  Sair
+</button>
 
     </nav>
   );
