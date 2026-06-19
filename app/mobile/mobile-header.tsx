@@ -71,12 +71,13 @@ export function MobileHeader() {
 >
 
       <div
-        className="
-          flex
-          items-center
-          justify-between
-        "
-      >
+  className="
+    flex
+    items-center
+    justify-between
+    w-full
+  "
+>
 
         <div>
 
@@ -106,14 +107,15 @@ export function MobileHeader() {
         {logo && (
 
           <img
-            src={logo}
-            className="
-              w-10
-              h-10
-              rounded-full
-              object-cover
-            "
-          />
+  src={logo}
+  className="
+    w-10
+    h-10
+    rounded-full
+    object-cover
+    shrink-0
+  "
+/>
 
         )}
 
