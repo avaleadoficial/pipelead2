@@ -129,11 +129,11 @@ export function OpportunityModal({
 
   <div className="min-w-0">
 
-    <h3 className="font-semibold text-sm truncate">
+    <h3 className="font-semibold text-xs truncate">
       {card.nome}
     </h3>
 
-    <p className="text-gray-500 text-xs truncate">
+    <p className="text-gray-500 text-[10px] truncate">
       {card.empresa}
     </p>
 
