@@ -125,33 +125,33 @@ export function OpportunityModal({
   `}
 >
 
-        <div className="flex justify-between items-start">
+       <div className="flex justify-between items-start gap-2">
 
-          <div>
+  <div className="min-w-0">
 
-            <h3 className="font-bold text-lg">
-              {card.nome}
-            </h3>
+    <h3 className="font-semibold text-sm truncate">
+      {card.nome}
+    </h3>
 
-            <p className="text-gray-500 text-sm">
-              {card.empresa}
-            </p>
+    <p className="text-gray-500 text-xs truncate">
+      {card.empresa}
+    </p>
 
-          </div>
+  </div>
 
-          <span className="font-bold">
-            {card.valor}
-          </span>
+  <span className="font-semibold text-xs whitespace-nowrap">
+    {card.valor}
+  </span>
 
-        </div>
-
+</div>
+        
         <div
   className={`
     flex
     items-center
     gap-2
     mt-5
-    text-sm
+    text-xs
     ${
       card.data ===
       new Date()
@@ -169,7 +169,7 @@ export function OpportunityModal({
   `}
 >
 
-  <CalendarDays size={16} />
+  <CalendarDays size={14} />
 
   {formatarData(card.data)}
 
