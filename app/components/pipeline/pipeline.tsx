@@ -614,6 +614,22 @@ function Column({
   const [title, setTitle] =
     useState(column.title || "");
 
+  const totalColumnValue = column.cards.reduce(
+  (total: number, card: any) =>
+    total + (Number(card.valor) || 0),
+  0
+);
+
+const formattedTotal = totalColumnValue.toLocaleString(
+  "pt-BR",
+  {
+    style: "currency",
+    currency: "BRL",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  }
+);
+
   // MODAL OPORTUNIDADE
   const [
     openOpportunityModal,
@@ -718,81 +734,93 @@ md:min-w-[170px]
 <div
   className="
     flex
-    items-center
+    items-start
     justify-between
-    h-8
-    mb-5
+    min-h-[42px]
+    mb-4
   "
 >
 
+  {/* ESQUERDA + TÍTULO */}
+  <div className="flex items-start gap-1">
+
+    <button
+      onClick={() => onMoveLeft(column.id)}
+      className="
+        p-1
+        rounded-lg
+        hover:bg-white
+        cursor-pointer
+        mt-0.5
+      "
+    >
+      <ChevronLeft size={12} />
+    </button>
+
+    <button
+      onClick={() => setEditing(true)}
+      className="
+        flex
+        flex-col
+        items-start
+        text-left
+        cursor-pointer
+        min-w-0
+      "
+    >
+
+      <div className="flex items-center gap-1.5">
+
+        <span className="font-medium text-xs truncate">
+          {column.title || "Sem nome"}
+        </span>
+
+        <span
+          className="
+            flex
+            items-center
+            justify-center
+            w-4
+            h-4
+            text-[10px]
+            rounded-full
+            bg-gray-200
+            text-gray-600
+            flex-shrink-0
+          "
+        >
+          {column.cards.length}
+        </span>
+
+        <Pencil
+          size={12}
+          className="text-black flex-shrink-0"
+        />
+
+      </div>
+
+      {/* TOTAL DA COLUNA */}
+      <span className="text-xs text-gray-500 mt-1">
+        {formattedTotal}
+      </span>
+
+    </button>
+
+  </div>
+
+  {/* DIREITA */}
   <button
-  onClick={() =>
-    onMoveLeft(column.id)
-  }
-  className="
-    p-1
-    rounded-lg
-    hover:bg-white
-    cursor-pointer
-  "
->
-  <ChevronLeft size={12} />
-</button>
-
- <button
-  onClick={() =>
-    setEditing(true)
-  }
-  className="
-    flex
-    items-center
-    gap-1
-    font-medium
-    text-xs
-    cursor-pointer
-  "
->
-
-  <span>
-    {column.title || "Sem nome"}
-  </span>
-
-  <span
-  className="
-    flex
-    items-center
-    justify-center
-    w-4
-    h-4
-    text-[10px]
-    rounded-full
-    bg-gray-200
-    text-gray-600
-  "
->
-  {column.cards.length}
-</span>
-
-  <Pencil
-    size={12}
-    className="text-black"
-  />
-
-</button>
-
-  <button
-  onClick={() =>
-    onMoveRight(column.id)
-  }
-  className="
-    p-1
-    rounded-lg
-    hover:bg-white
-    cursor-pointer
-  "
->
-  <ChevronRight size={12} />
-</button>
+    onClick={() => onMoveRight(column.id)}
+    className="
+      p-1
+      rounded-lg
+      hover:bg-white
+      cursor-pointer
+      mt-0.5
+    "
+  >
+    <ChevronRight size={12} />
+  </button>
 
 </div>
 
