@@ -23,6 +23,25 @@ import { CreateOpportunityModal } from "../modals/create-opportunity-modal";
 
 import { CreateColumnModal } from "../modals/create-column-modal";
 
+function parseValor(valor: any): number {
+  if (valor === null || valor === undefined || valor === "") {
+    return 0;
+  }
+
+  if (typeof valor === "number") {
+    return valor;
+  }
+
+  const texto = String(valor)
+    .trim()
+    .replace(/\./g, "")
+    .replace(",", ".");
+
+  const numero = Number(texto);
+
+  return Number.isNaN(numero) ? 0 : numero;
+}
+
 export function Pipeline({
   projectId = "default",
 }: {
@@ -225,7 +244,7 @@ if (
         phone: updatedCard.telefone,
         email: updatedCard.email,
         value:
-          Number(updatedCard.valor) || 0,
+          parseValor(updatedCard.valor),
         data:
           updatedCard.data || null,
         obs:
@@ -294,10 +313,10 @@ if (
         email:
           newOpportunity.email,
 
-        value:
-          Number(
-            newOpportunity.valor
-          ) || 0,
+       value:
+  parseValor(
+    newOpportunity.valor
+  ),
 
         data:
           newOpportunity.data || null,
@@ -616,7 +635,7 @@ function Column({
 
   const totalColumnValue = column.cards.reduce(
   (total: number, card: any) =>
-    total + (Number(card.valor) || 0),
+    total + parseValor(card.valor),
   0
 );
 
